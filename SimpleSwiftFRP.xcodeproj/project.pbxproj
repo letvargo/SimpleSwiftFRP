@@ -1,0 +1,415 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8BB3E6D01AD6232A00E90CFF /* SimpleSwiftFRP.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BB3E6CF1AD6232A00E90CFF /* SimpleSwiftFRP.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8BB3E6D61AD6232B00E90CFF /* SimpleSwiftFRP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BB3E6CA1AD6232A00E90CFF /* SimpleSwiftFRP.framework */; };
+		8BB3E6DD1AD6232B00E90CFF /* SimpleSwiftFRPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB3E6DC1AD6232B00E90CFF /* SimpleSwiftFRPTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8BB3E6D71AD6232B00E90CFF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8BB3E6C11AD6232A00E90CFF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8BB3E6C91AD6232A00E90CFF;
+			remoteInfo = SimpleSwiftFRP;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		8BB3E6CA1AD6232A00E90CFF /* SimpleSwiftFRP.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleSwiftFRP.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BB3E6CE1AD6232A00E90CFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8BB3E6CF1AD6232A00E90CFF /* SimpleSwiftFRP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleSwiftFRP.h; sourceTree = "<group>"; };
+		8BB3E6D51AD6232B00E90CFF /* SimpleSwiftFRPTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleSwiftFRPTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BB3E6DB1AD6232B00E90CFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8BB3E6DC1AD6232B00E90CFF /* SimpleSwiftFRPTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSwiftFRPTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8BB3E6C61AD6232A00E90CFF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BB3E6D21AD6232B00E90CFF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BB3E6D61AD6232B00E90CFF /* SimpleSwiftFRP.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8BB3E6C01AD6232A00E90CFF = {
+			isa = PBXGroup;
+			children = (
+				8BB3E6CC1AD6232A00E90CFF /* SimpleSwiftFRP */,
+				8BB3E6D91AD6232B00E90CFF /* SimpleSwiftFRPTests */,
+				8BB3E6CB1AD6232A00E90CFF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8BB3E6CB1AD6232A00E90CFF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8BB3E6CA1AD6232A00E90CFF /* SimpleSwiftFRP.framework */,
+				8BB3E6D51AD6232B00E90CFF /* SimpleSwiftFRPTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8BB3E6CC1AD6232A00E90CFF /* SimpleSwiftFRP */ = {
+			isa = PBXGroup;
+			children = (
+				8BB3E6CF1AD6232A00E90CFF /* SimpleSwiftFRP.h */,
+				8BB3E6CD1AD6232A00E90CFF /* Supporting Files */,
+			);
+			path = SimpleSwiftFRP;
+			sourceTree = "<group>";
+		};
+		8BB3E6CD1AD6232A00E90CFF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				8BB3E6CE1AD6232A00E90CFF /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8BB3E6D91AD6232B00E90CFF /* SimpleSwiftFRPTests */ = {
+			isa = PBXGroup;
+			children = (
+				8BB3E6DC1AD6232B00E90CFF /* SimpleSwiftFRPTests.swift */,
+				8BB3E6DA1AD6232B00E90CFF /* Supporting Files */,
+			);
+			path = SimpleSwiftFRPTests;
+			sourceTree = "<group>";
+		};
+		8BB3E6DA1AD6232B00E90CFF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				8BB3E6DB1AD6232B00E90CFF /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8BB3E6C71AD6232A00E90CFF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BB3E6D01AD6232A00E90CFF /* SimpleSwiftFRP.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8BB3E6C91AD6232A00E90CFF /* SimpleSwiftFRP */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8BB3E6E01AD6232B00E90CFF /* Build configuration list for PBXNativeTarget "SimpleSwiftFRP" */;
+			buildPhases = (
+				8BB3E6C51AD6232A00E90CFF /* Sources */,
+				8BB3E6C61AD6232A00E90CFF /* Frameworks */,
+				8BB3E6C71AD6232A00E90CFF /* Headers */,
+				8BB3E6C81AD6232A00E90CFF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SimpleSwiftFRP;
+			productName = SimpleSwiftFRP;
+			productReference = 8BB3E6CA1AD6232A00E90CFF /* SimpleSwiftFRP.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		8BB3E6D41AD6232B00E90CFF /* SimpleSwiftFRPTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8BB3E6E31AD6232B00E90CFF /* Build configuration list for PBXNativeTarget "SimpleSwiftFRPTests" */;
+			buildPhases = (
+				8BB3E6D11AD6232B00E90CFF /* Sources */,
+				8BB3E6D21AD6232B00E90CFF /* Frameworks */,
+				8BB3E6D31AD6232B00E90CFF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8BB3E6D81AD6232B00E90CFF /* PBXTargetDependency */,
+			);
+			name = SimpleSwiftFRPTests;
+			productName = SimpleSwiftFRPTests;
+			productReference = 8BB3E6D51AD6232B00E90CFF /* SimpleSwiftFRPTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8BB3E6C11AD6232A00E90CFF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = letvargo;
+				TargetAttributes = {
+					8BB3E6C91AD6232A00E90CFF = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					8BB3E6D41AD6232B00E90CFF = {
+						CreatedOnToolsVersion = 6.3;
+					};
+				};
+			};
+			buildConfigurationList = 8BB3E6C41AD6232A00E90CFF /* Build configuration list for PBXProject "SimpleSwiftFRP" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 8BB3E6C01AD6232A00E90CFF;
+			productRefGroup = 8BB3E6CB1AD6232A00E90CFF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8BB3E6C91AD6232A00E90CFF /* SimpleSwiftFRP */,
+				8BB3E6D41AD6232B00E90CFF /* SimpleSwiftFRPTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8BB3E6C81AD6232A00E90CFF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BB3E6D31AD6232B00E90CFF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8BB3E6C51AD6232A00E90CFF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BB3E6D11AD6232B00E90CFF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BB3E6DD1AD6232B00E90CFF /* SimpleSwiftFRPTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8BB3E6D81AD6232B00E90CFF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8BB3E6C91AD6232A00E90CFF /* SimpleSwiftFRP */;
+			targetProxy = 8BB3E6D71AD6232B00E90CFF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		8BB3E6DE1AD6232B00E90CFF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		8BB3E6DF1AD6232B00E90CFF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		8BB3E6E11AD6232B00E90CFF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = SimpleSwiftFRP/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		8BB3E6E21AD6232B00E90CFF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = SimpleSwiftFRP/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		8BB3E6E41AD6232B00E90CFF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = SimpleSwiftFRPTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		8BB3E6E51AD6232B00E90CFF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = SimpleSwiftFRPTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8BB3E6C41AD6232A00E90CFF /* Build configuration list for PBXProject "SimpleSwiftFRP" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BB3E6DE1AD6232B00E90CFF /* Debug */,
+				8BB3E6DF1AD6232B00E90CFF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8BB3E6E01AD6232B00E90CFF /* Build configuration list for PBXNativeTarget "SimpleSwiftFRP" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BB3E6E11AD6232B00E90CFF /* Debug */,
+				8BB3E6E21AD6232B00E90CFF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		8BB3E6E31AD6232B00E90CFF /* Build configuration list for PBXNativeTarget "SimpleSwiftFRPTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BB3E6E41AD6232B00E90CFF /* Debug */,
+				8BB3E6E51AD6232B00E90CFF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8BB3E6C11AD6232A00E90CFF /* Project object */;
+}
