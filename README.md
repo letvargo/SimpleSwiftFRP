@@ -105,27 +105,35 @@ A `Cell` is guaranteed to always have at least one value - the value that you su
 
     public var value: T
 
-`value` returns the value of the `Cell` at the time that the value is requested.
+`value` returns the value of the `Cell` at the time that the value is requested. It is a shortcut for calling `valueAt(now())`.
 
 `Cell` also has a public function called `valueAt(time: Time)`:
 
+    public func valueAt(time: Time) -> T
+
+`valueAt` returns the `Cell`'s value at the specified time. Right now this has limited functionality, but the plan is to implement a means of tracking, browsing, and restoring values. Theoretically, the history of every value stored in a `Cell` is retrievable and it ought to be possible to recreate the application state as it existed at any point in time after its launch.
     
-    
-    
+`Cell` also has a `send` instance method. When `send` is called on a `Cell` the `Cell`'s value is sent to any `Outlet`'s that are attached to it. It is primarily used as a means of configuring user interface elements after initialization.
     
 A `Cell` can be the left-hand argument for all six of the primitive operators. It can be the right-hand argument for the `lift` ( `--^` ) operator.
 
 A full discussion of the primitive operators occurs below.
 
-## Synchronization
+### `Outlet<T>`
 
-Grand Central Dispatch is used to manage synchronization. Events in the event stream are handled on a serial queue using `dispatch_async`. Events are processed in the order in which they occur but do not block the rest of the application.
+The sole purpose of an `Outlet` is to perform some kind of an output operation. Anything that alters some aspect of the program state outside of the event stream is considered output. Updates to the user interface are the most obvious example.
 
-When an `Outlet` produces output of some kind, those changes are handled on the main queue using `dispatch_async`.
+`Outlet` has one public initializer:
 
-Changes to all other internal properties of a `Source`, `Stream` or `Cell` are synchronized using their own private queues and should be thread safe.
+    init()
+    
+`Outlet` has no public properties and no public instance methods.
 
-Concurrency among different program behaviors should be possible eventually but as of yet that feature has not been implemented.
+An `Outlet` must be attached to a `Cell` in order to work. You cannot attach an `Outlet` to a `Source`, a `Stream`, or another `Outlet`.
+
+An `Outlet` can be the right-hand argument for the `outlet` ( `--<` ) operator. It cannot be the left-hand argument for any operator.
+
+A full discussion of the primitive operators occurs below.
 
 ## Primitive Operators
 
@@ -161,3 +169,12 @@ The `map` operator returns the `Stream` on the right-hand side so that it can be
         >-- (streamB, transformAToB)
         >-- (streamC, transformBToC)
 
+## Synchronization
+
+Grand Central Dispatch is used to manage synchronization. Events in the event stream are handled on a serial queue using `dispatch_async`. Events are processed in the order in which they occur but do not block the rest of the application.
+
+When an `Outlet` produces output of some kind, those changes are handled on the main queue using `dispatch_async`.
+
+Changes to all other internal properties of a `Source`, `Stream` or `Cell` are synchronized using their own private queues and should be thread safe.
+
+Concurrency among different program behaviors should be possible eventually but as of yet that feature has not been implemented.
