@@ -8,7 +8,12 @@
 
 import Foundation
 
-public class Cell<T>: Stream<T>, Listener, Whisperer {
+enum CellType<S, T> {
+    case Merged([Stream<S>], S -> T)
+    case LiftedFromOne(Stream<S>, S -> T)
+}
+
+public class Cell<T>: Listener, Whisperer {
     
     typealias Event = (time: Time, value: T)
     
@@ -20,65 +25,71 @@ public class Cell<T>: Stream<T>, Listener, Whisperer {
     
     public var value: T {
         get {
-            var v: T!
-            send_sync { [unowned self] in
-                v = self.valueAt(now())
-            }
-            return v
+            return valueAt(now())
         }
     }
-    
-    public var valueAt: Time -> T {
-        get {
-            return { [unowned self] time in
-                var result = self.events[0].value
-                self.synchronized {
-                    var i = self.count - 1
-                    whileLoop: while i > 0 {
-                        let event = self.events[i]
-                        switch event.time <= time {
-                        case true:
-                            result = event.value
-                            break whileLoop
-                        default:
-                            --i
-                        }
-                    }
-                }
-                return result
-            }
-        }
-    }
-    
+
+    private var _f: () -> Result<T> = { _ in .Failure }
+    private var sources: [Whisperer] = []
     private var outlets = ObserverSet<Command>()
     private var events: [Event] = []
     private var count = 1
     private var limit: Int = Int.max
+    private var addNewEvent: Time -> () = { _ in return }
     
-    var addNewEvent: Time -> () = { _ in return }
-    
-    public init(limit: Int = Int.max) {
-        super.init()
-        self.limit = limit
-    }
-    
-    public convenience init(constant: T, limit: Int = Int.max) {
-        self.init(limit: limit)
+    public init(constant: T) {
+        self.limit = 1
         self.events = [(Up.time, constant)]
-        self.f = { [unowned self] in
+        self._f = { [unowned self] in
             >|self.valueAt(Up.time)
         }
-        self.sources = [self]
     }
     
     public convenience init(initialValue: T, limit: Int = Int.max) {
-        self.init(constant: initialValue, limit: limit)
-        self.sources = []
+        self.init(constant: initialValue)
+        self.limit = limit
     }
     
-    convenience init<S>(stream: Stream<S>, initialValue: T, limit: Int = Int.max, g f: S -> T) {
-        self.init(initialValue: initialValue, limit: limit)
-        self.liftedFromOne(stream, f: f)
+    public func valueAt(time: Time) -> T {
+        var result = self.events[0].value
+        self.synchronized {
+            var i = self.count - 1
+            whileLoop: while i > 0 {
+                let event = self.events[i]
+                switch event.time <= time {
+                case true:
+                    result = event.value
+                    break whileLoop
+                default:
+                    --i
+                }
+            }
+        }
+        return result
+    }
+    
+    func f() -> Result<T> {
+        return _f()
+    }
+    
+    func mergedFrom<S>(streams: [Stream<S>], f g: S -> T) -> Cell<T> {
+        let subCells = streams.map { stream in
+            Cell(initialValue: self.valueAt(Up.time), limit: 1).liftedFromOne(stream) { val in
+                return g(val)
+            }
+        }
+        self.addNewEvent = { [unowned self] time in
+            let latest = subCells.reduce(self.valueAt(Up.time)) {
+                let lastEvent = $1.events[$1.count - 1]
+                return lastEvent.time == time
+                    ? lastEvent.value
+                    : $0
+            }
+            self.synchronized {
+                self.addEventWithCountCheck(time, value: latest, count: self.count, limit: self.limit)
+            }
+        }
+        return self.withSources(streams.map { $0.getSources() })
     }
     
     func liftedFromOne<S>(stream: Stream<S>, f g: S -> T) -> Cell<T> {
@@ -93,18 +104,48 @@ public class Cell<T>: Stream<T>, Listener, Whisperer {
                 break
             }
         }
-        return self.withSources([stream.sources])
+        return self.withSources([stream.getSources()])
+    }
+    
+    func liftedFromOne<S>(source: Source<S>, f g: S -> T) -> Cell<T> {
+        self.addNewEvent = { [unowned self, unowned source] time in
+            switch source.f() {
+            case .Success(let value):
+                self.synchronized {
+                    let value = g(value)
+                    self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
+                }
+            case .Failure:
+                break
+            }
+        }
+        return self.withSources([source.getSources()])
+    }
+    
+    func liftedFromOne<S>(cell: Cell<S>, f g: S -> T) -> Cell<T> {
+        self.addNewEvent = { [unowned self, unowned cell] time in
+            switch cell.f() {
+            case .Success(let value):
+                self.synchronized {
+                    let value = g(value)
+                    self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
+                }
+            case .Failure:
+                break
+            }
+        }
+        return self.withSources([cell.getSources()])
     }
     
     func liftedFromTwo<C1, C2>(a: Cell<C1>, _ b: Cell<C2>, _ g: (C1, C2) -> T) -> Cell<T> {
         self.events = [(Up.time, g(a.valueAt(Up.time), b.valueAt(Up.time)))]
-        self.addNewEvent = { [unowned self, unowned a, unowned b] time in
+        self.addNewEvent = { time in
             self.synchronized {
                 let value = g(a.valueAt(time), b.valueAt(time))
                 self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources([a.sources, b.sources])
+        return self.withSources([a.getSources(), b.getSources()])
     }
     
     func liftedFromThree<C1, C2, C3>(a: Cell<C1>, _ b: Cell<C2>, _ c: Cell<C3>, _ g: (C1, C2, C3) -> T) -> Cell<T>{
@@ -116,7 +157,7 @@ public class Cell<T>: Stream<T>, Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources([a.sources, b.sources, c.sources])
+        return self.withSources([a.getSources(), b.getSources(), c.getSources()])
     }
     
     func liftedFromFour<C1, C2, C3, C4>(a: Cell<C1>, _ b: Cell<C2>, _ c: Cell<C3>, _ d: Cell<C4>, _ g: (C1, C2, C3, C4) -> T) -> Cell<T> {
@@ -128,7 +169,7 @@ public class Cell<T>: Stream<T>, Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources([a.sources, b.sources, c.sources, d.sources])
+        return self.withSources([a.getSources(), b.getSources(), c.getSources(), d.getSources()])
     }
     
     func liftedFromFive<C1, C2, C3, C4, C5>(a: Cell<C1>, _ b: Cell<C2>, _ c: Cell<C3>, _ d: Cell<C4>, _ e: Cell<C5>, _ g: (C1, C2, C3, C4, C5) -> T) -> Cell<T> {
@@ -140,7 +181,7 @@ public class Cell<T>: Stream<T>, Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources([a.sources, b.sources, c.sources, d.sources, e.sources])
+        return self.withSources([a.getSources(), b.getSources(), c.getSources(), d.getSources(), e.getSources()])
     }
     
     func liftedFromSix<C1, C2, C3, C4, C5, C6>(a: Cell<C1>, _ b: Cell<C2>, _ c: Cell<C3>, _ d: Cell<C4>, _ e: Cell<C5>, _ f: Cell<C6>, _ g: (C1, C2, C3, C4, C5, C6) -> T) -> Cell<T> {
@@ -152,7 +193,7 @@ public class Cell<T>: Stream<T>, Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources([a.sources, b.sources, c.sources, d.sources, e.sources, f.sources])
+        return self.withSources([a.getSources(), b.getSources(), c.getSources(), d.getSources(), e.getSources(), f.getSources()])
     }
     
     func liftedFromSeven<C1, C2, C3, C4, C5, C6, C7>(a: Cell<C1>, _ b: Cell<C2>, _ c: Cell<C3>, _ d: Cell<C4>, _ e: Cell<C5>, _ f: Cell<C6>, _ g: Cell<C7>, h: (C1, C2, C3, C4, C5, C6, C7) -> T) -> Cell<T> {
@@ -164,7 +205,30 @@ public class Cell<T>: Stream<T>, Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources([a.sources, b.sources, c.sources, d.sources, e.sources, f.sources, g.sources])
+        return self.withSources([a.getSources(), b.getSources(), c.getSources(), d.getSources(), e.getSources(), f.getSources(), g.getSources()])
+    }
+    
+    private func addEventWithCountCheck(time: Time, value: T, count: Int, limit: Int) {
+        switch count + 1 == limit {
+        case true:
+            events.removeAtIndex(1)
+        default:
+            self.count += 1
+        }
+        events.append((time, value))
+        self._f = { [unowned self] in
+            >|self.valueAt(time)
+        }
+    }
+    
+    private func withSources(sources: [[Whisperer]]) -> Cell<T> {
+        self.sources = reduceSources(sources)
+        self.sources.reduce(()) { $1.addListener(self) }
+        return self
+    }
+    
+    func getSources() -> [Whisperer] {
+        return sources
     }
     
     public func send() {
@@ -174,61 +238,20 @@ public class Cell<T>: Stream<T>, Listener, Whisperer {
     func didReceiveCommand(command: Command) {
         switch command {
         case .NewEvent(let time):
-            self.addNewEvent(time)
-            self.outlets.notify(.Update(time))
+            addNewEvent(time)
+            outlets.notify(.Update(time))
         default:
             return
         }
     }
     
     func addListener(listener: Listener) {
-        self.outlets.add { listener.didReceiveCommand($0) }
-    }
-    
-    func withSources(sources: [[Whisperer]]) -> Cell<T> {
-        self.sources = reduceSources(sources)
-        self.sources.reduce(()) { $1.addListener(self) }
-        return self
-    }
-    
-    func mergedFrom<S>(streams: [Stream<S>], f g: S -> T) -> Cell<T> {
-        let subCells = streams.map { $0.lift(self.valueAt(Up.time), f: { val in return g(val) }) }
-        self.addNewEvent = { [unowned self] time in
-            let latest = subCells.reduce(self.valueAt(Up.time)) {
-                let lastEvent = $1.events[$1.count - 1]
-                return lastEvent.time == time
-                    ? lastEvent.value
-                    : $0
-            }
-            self.synchronized {
-                self.addEventWithCountCheck(time, value: latest, count: self.count, limit: self.limit)
-            }
-        }
-        return self.withSources(streams.map { $0.sources })
-    }
-    
-    private func addEventWithCountCheck(time: Time, value: T, count: Int, limit: Int) {
-        switch count + 1 == limit {
-        case true:
-            self.events.removeAtIndex(1)
-        default:
-            self.count += 1
-        }
-        self.events.append((time, value))
-        self.f = { [unowned self] in
-            >|self.valueAt(time)
-        }
-    }
-    
-    public func out(action: T -> ()) -> Outlet<T> {
-        let outlet = Outlet<T>(a: self, action: action)
-        self.outlets.add { outlet.didReceiveCommand($0) }
-        return outlet
+        outlets.add { listener.didReceiveCommand($0) }
     }
     
     func addOutlet(outlet: Outlet<T>, action: T -> ()) -> Cell<T> {
-        outlet.configure(self, action: action)
-        self.outlets.add { outlet.didReceiveCommand($0) }
+        outlet.setOutputFunction(self, action: action)
+        outlets.add { outlet.didReceiveCommand($0) }
         return self
     }
 }

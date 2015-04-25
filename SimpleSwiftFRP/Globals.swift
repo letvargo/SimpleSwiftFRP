@@ -36,7 +36,7 @@ public let now: () -> CFTimeInterval = CACurrentMediaTime
 /// :Cases:
 /// * .NewEvent(Time)
 /// * .Update(Time)
-enum Command {
+public enum Command {
     
     /// .NewEvent(Time) is sent by a Source to notify listeners that a new value
     /// entered the event stream at the associated time.
@@ -47,4 +47,4 @@ enum Command {
     case Update(Time)
 }
 
-
+ let notificationQueue = dispatch_queue_create("com.letvargo.NotificationQueue", DISPATCH_QUEUE_SERIAL)

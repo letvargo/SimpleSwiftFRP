@@ -10,37 +10,18 @@ import Foundation
 
 public class Outlet<T>: Listener {
     
-    private var f: Time -> ()
-    private let sync: Bool
+    private var f: Time -> () = { _ in return }
     
-    public init(sync: Bool = false) {
-        self.f = { _ in return }
-        self.sync = sync
-    }
+    public init() { }
     
-    init(a: Cell<T>, action: T -> ()) {
-        self.f = { action(a.valueAt($0)) }
-        self.sync = false
-    }
-    
-    init(a: Cell<T>, sync: Bool, action: T -> ()) {
-        self.f = { action(a.valueAt($0)) }
-        self.sync = sync
-    }
-    
-    func configure(a: Cell<T>, action: T -> ()) {
+    func setOutputFunction(a: Cell<T>, action: T -> ()) {
         self.f = { action(a.valueAt($0)) }
     }
     
     func didReceiveCommand(command: Command) {
         switch command {
         case .Update(let time):
-            switch self.sync {
-            case false:
-                dispatch_async(dispatch_get_main_queue()) { self.f(time) }
-            default:
-                dispatch_sync(dispatch_get_main_queue()) { self.f(time) }
-            }
+            dispatch_async(dispatch_get_main_queue()) { self.f(time) }
         default:
             return
         }

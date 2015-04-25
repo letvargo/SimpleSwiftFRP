@@ -6,47 +6,53 @@
 //  Copyright (c) 2015 letvargo. All rights reserved.
 //
 
-import Foundation
+/// The lift Operator
+infix operator --^ { associativity left }
 
-public class Lift {
-    
-    public class func two<C1, C2, T>(cellA a: Cell<C1>, cellB b: Cell<C2>, g: (C1, C2) -> T) -> Cell<T> {
-        return Cell().liftedFromTwo(a, b, g)
-    }
-    
-    public class func twoWithCapacity<C1, C2, T>(cellA a: Cell<C1>, cellB b: Cell<C2>, capacity: Int, g: (C1, C2) -> T) -> Cell<T> {
-        return Cell(limit: capacity)
-    }
-    
-    public class func three<C1, C2, C3, T>(cellA a: Cell<C1>, cellB b: Cell<C2>, cellC c: Cell<C3>, transform g: (C1, C2, C3) -> T) -> Cell<T> {
-        return Cell().liftedFromThree(a, b, c, g)
-    }
-    
-    public class func threeWithCapacity<C1, C2, C3, T>(cellA a: Cell<C1>, cellB b: Cell<C2>, cellC c: Cell<C3>, capacity: Int, transform g: (C1, C2, C3) -> T) -> Cell<T> {
-        return Cell(limit: capacity).liftedFromThree(a, b, c, g)
-    }
-    
-    public class func four<C1, C2, C3, C4, T>(cellA a: Cell<C1>, cellB b: Cell<C2>, cellC c: Cell<C3>, cellD d: Cell<C4>, transform g: (C1, C2, C3, C4) -> T) -> Cell<T> {
-        return Cell().liftedFromFour(a, b, c, d, g)
-    }
-    
-    public class func fourWithCapacity<C1, C2, C3, C4, T>(cellA a: Cell<C1>, cellB b: Cell<C2>, cellC c: Cell<C3>, cellD d: Cell<C4>, capacity: Int, transform g: (C1, C2, C3, C4) -> T) -> Cell<T> {
-        return Cell(limit: capacity).liftedFromFour(a, b, c, d, g)
-    }
-    
-    public class func five<C1, C2, C3, C4, C5, T>(cellA a: Cell<C1>, cellB b: Cell<C2>, cellC c: Cell<C3>, cellD d: Cell<C4>, cellE e: Cell<C5>, transform g: (C1, C2, C3, C4, C5) -> T) -> Cell<T> {
-        return Cell().liftedFromFive(a, b, c, d, e, g)
-    }
-    
-    public class func fiveWithCapacity<C1, C2, C3, C4, C5, T>(cellA a: Cell<C1>, cellB b: Cell<C2>, cellC c: Cell<C3>, cellD d: Cell<C4>, cellE e: Cell<C5>, capacity: Int, transform g: (C1, C2, C3, C4, C5) -> T) -> Cell<T> {
-        return Cell(limit: capacity).liftedFromFive(a, b, c, d, e, g)
-    }
-    
-    public class func six<C1, C2, C3, C4, C5, T>(cellA a: Cell<C1>, cellB b: Cell<C2>, cellC c: Cell<C3>, cellD d: Cell<C4>, cellE e: Cell<C5>, transform g: (C1, C2, C3, C4, C5) -> T) -> Cell<T> {
-        return Cell().liftedFromFive(a, b, c, d, e, g)
-    }
-    
-    public class func sixWithCapacity<C1, C2, C3, C4, C5, C6, T>(cellA a: Cell<C1>, cellB b: Cell<C2>, cellC c: Cell<C3>, cellD d: Cell<C4>, cellE e: Cell<C5>, cellF f: Cell<C6>, capacity: Int, transform g: (C1, C2, C3, C4, C5, C6) -> T) -> Cell<T> {
-        return Cell(limit: capacity).liftedFromSix(a, b, c, d, e, f, g)
-    }
+public func --^<T, U>(stream: Stream<T>, args: (cell: Cell<U>, f: T -> U)) -> Cell<U> {
+    return args.cell.liftedFromOne(stream, f: args.f)
+}
+
+public func --^<T>(stream: Stream<T>, cell: Cell<T>) -> Cell<T> {
+    return cell.liftedFromOne(stream, f: id)
+}
+
+public func --^<T, U>(source: Source<T>, args: (cell: Cell<U>, f: T -> U)) -> Cell<U> {
+    return args.cell.liftedFromOne(source, f: args.f)
+}
+
+public func --^<T>(source: Source<T>, cell: Cell<T>) -> Cell<T> {
+    return cell.liftedFromOne(source, f: id)
+}
+
+public func --^<T, U>(cell: Cell<T>, args: (cell: Cell<U>, f: T -> U)) -> Cell<U> {
+    return args.cell.liftedFromOne(cell, f: args.f)
+}
+
+public func --^<T>(cellA: Cell<T>, cellB: Cell<T>) -> Cell<T> {
+    return cellB.liftedFromOne(cellA, f: id)
+}
+
+public func --^<C1, C2, T>(cells: (Cell<C1>, Cell<C2>), args: (cell: Cell<T>, f: (C1, C2) -> T)) -> Cell<T> {
+    return args.cell.liftedFromTwo(cells.0, cells.1, args.f)
+}
+
+public func --^<C1, C2, C3, T>(cells: (Cell<C1>, Cell<C2>, Cell<C3>), args: (cell: Cell<T>, f: (C1, C2, C3) -> T)) -> Cell<T> {
+    return args.cell.liftedFromThree(cells.0, cells.1, cells.2, args.f)
+}
+
+public func --^<C1, C2, C3, C4, T>(cells: (Cell<C1>, Cell<C2>, Cell<C3>, Cell<C4>), args: (cell: Cell<T>, f: (C1, C2, C3, C4) -> T)) -> Cell<T> {
+    return args.cell.liftedFromFour(cells.0, cells.1, cells.2, cells.3, args.f)
+}
+
+public func --^<C1, C2, C3, C4, C5, T>(cells: (Cell<C1>, Cell<C2>, Cell<C3>, Cell<C4>, Cell<C5>), args: (cell: Cell<T>, f: (C1, C2, C3, C4, C5) -> T)) -> Cell<T> {
+    return args.cell.liftedFromFive(cells.0, cells.1, cells.2, cells.3, cells.4, args.f)
+}
+
+public func --^<C1, C2, C3, C4, C5, C6, T>(cells: (Cell<C1>, Cell<C2>, Cell<C3>, Cell<C4>, Cell<C5>, Cell<C6>), args: (cell: Cell<T>, f: (C1, C2, C3, C4, C5, C6) -> T)) -> Cell<T> {
+    return args.cell.liftedFromSix(cells.0, cells.1, cells.2, cells.3, cells.4, cells.5, args.f)
+}
+
+public func --^<C1, C2, C3, C4, C5, C6, C7, T>(cells: (Cell<C1>, Cell<C2>, Cell<C3>, Cell<C4>, Cell<C5>, Cell<C6>, Cell<C7>), args: (cell: Cell<T>, f: (C1, C2, C3, C4, C5, C6, C7) -> T)) -> Cell<T> {
+    return args.cell.liftedFromSeven(cells.0, cells.1, cells.2, cells.3, cells.4, cells.5, cells.6, h: args.f)
 }
