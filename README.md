@@ -156,7 +156,7 @@ A full discussion of the primitive operators occurs below.
 
 Using these six operators it is possible to build complex application behaviors that are referentially transparent and produce no side effects except through designated `Outlet`s.
 
-### The `map` operator: >--
+### The `map` operator: `>--`
     
     public func >-- <T, U>(stream: Stream<T>, args: (stream: Stream<U>, f: T -> U)) -> Stream<U>
     public func >-- <T, U>(source: Source<T>, args: (stream: Stream<U>, f: T -> U)) -> Stream<U>
@@ -230,6 +230,43 @@ When you merge two or more `Stream`s the `Cell` updates its value anytime that o
 The left-hand argument is an array of type `[Stream<T>]`. The right-hand side argument is a `Cell<T>` if no transformation is applied, or `Cell<U>` if you are transforming the value.
 
 The `merge` operator supports chaining off of the right-hand `Cell`.
+
+### The `lift` operator: `--^`
+
+    public func --^<T, U>(stream: Stream<T>, args: (cell: Cell<U>, f: T -> U)) -> Cell<U>
+    public func --^<T>(stream: Stream<T>, cell: Cell<T>) -> Cell<T>
+    public func --^<T, U>(source: Source<T>, args: (cell: Cell<U>, f: T -> U)) -> Cell<U>
+    public func --^<T>(source: Source<T>, cell: Cell<T>) -> Cell<T>
+    public func --^<T, U>(cell: Cell<T>, args: (cell: Cell<U>, f: T -> U)) -> Cell<U>
+    public func --^<T>(cellA: Cell<T>, cellB: Cell<T>) -> Cell<T>
+    public func --^<C1, C2, T>(cells: (Cell<C1>, Cell<C2>), args: (cell: Cell<T>, f: (C1, C2) -> T)) -> Cell<T>
+    public func --^<C1, C2, C3, T>(cells: (Cell<C1>, Cell<C2>, Cell<C3>), args: (cell: Cell<T>, f: (C1, C2, C3) -> T)) -> Cell<T>
+    public func --^<C1, C2, C3, C4, T>(cells: (Cell<C1>, Cell<C2>, Cell<C3>, Cell<C4>), args: (cell: Cell<T>, f: (C1, C2, C3, C4) -> T)) -> Cell<T>
+    public func --^<C1, C2, C3, C4, C5, T>(cells: (Cell<C1>, Cell<C2>, Cell<C3>, Cell<C4>, Cell<C5>), args: (cell: Cell<T>, f: (C1, C2, C3, C4, C5) -> T)) -> Cell<T>
+    public func --^<C1, C2, C3, C4, C5, C6, T>(cells: (Cell<C1>, Cell<C2>, Cell<C3>, Cell<C4>, Cell<C5>, Cell<C6>), args: (cell: Cell<T>, f: (C1, C2, C3, C4, C5, C6) -> T)) -> Cell<T>
+    public func --^<C1, C2, C3, C4, C5, C6, C7, T>(cells: (Cell<C1>, Cell<C2>, Cell<C3>, Cell<C4>, Cell<C5>, Cell<C6>, Cell<C7>), args: (cell: Cell<T>, f: (C1, C2, C3, C4, C5, C6, C7) -> T)) -> Cell<T>
+    
+The `lift` operator is used to lift a `Source` or a `Stream` into a `Cell`, or to lift multiple `Cell`s into another `Cell`.
+
+The left-hand argument is either a `Source`, a `Stream`, or a tuple made up of two or more `Cell`s. (Right now the maximum number of `Cell`s that can be lifted is seven, but that can be easily expanded.) The right-hand argument is either:
+
+ 1. A `Cell<T>` if you are lifting from a `Source<T>` or a `Stream<T>` and not transforming the value; or
+ 2. A `Cell<U>` if you are lifting from a `Source<T>` or a `Stream<T>` and you are transforming the value with a closure `T -> U`; or
+ 3. A tuple composed of a `Cell<T>` and a closure that takes as arguments all of the `Cell`s from the left-hand argument and returns a value, `T`.
+
+The `lift` operator supports chaining off of the `Cell` on the right-hand side of the operator.
+
+### The `output` operator: `--<`
+
+    public func --< <T>(cell: Cell<T>, args: (outlet: Outlet<T>, f: T -> ())) -> Cell<T>
+    
+The `output` operator is used to attach an `Outlet<T>` to a `Cell<T>`.
+
+The left-hand argument is a `Cell`. The right-hand argument is a tuple composed of the `Outlet` that is being attached and a closure that takes a value of type `T` and performs some output operation with it - e.g., updates the user interface, writes to disk, etc.
+
+In a properly constructed behavior, the `Outlet` is the only part of the event stream that causes any kind of a side-effect in the larger application.
+
+The `output` operator supports chaining off of the left-hand argument (`Cell<T>`) so that you can connect multiple `Outlet`s to a `Cell` in succession in a single chain.
 
 ## Synchronization
 
