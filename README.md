@@ -27,14 +27,14 @@ Values enter the event stream through an instance of the `Source` class, and exi
     
     srcMessage
         --^ cMessage                      // the lift operator:   --^ 
-        --< (oMessage, println)           // the outlet operator: --<
+        --< (oMessage, println)           // the output operator: --<
       
     srcMessage.send("Hello World!")       // Output: "Hello World!"
     srcMessage.send("Goodbye for now.")   // Output: "Goodbye for now."
       
 The above example is very simple, but complex behaviors derived from multiple `Source`s, `Stream`s and `Cell`s can be built up from less complex patterns, while the code itself retains the feel of a wiring diagram or a flowchart. Note that the *behavior* (printing the message) occurs automatically whenever a new value is introduced.
 
-While the code above is more complicated than you would normally use to execute a call to `println`, it offers benefits that become important as application behaviors becomes more complex. All stored values are immutable and stored as a series of events occurring at a specific point in time. Inside the event stream there are no side effects and referential integrity is maintained. Access to all values is synchronized and thread-safe and the behaviors are non-blocking.
+While the code above is more complicated than you would normally use to execute a call to `println`, it offers benefits that become important as application behaviors become more complex. All stored values are immutable and stored as a series of events occurring at a specific point in time. Inside the event stream there are no side effects and referential integrity is maintained. Access to all values is synchronized and thread-safe and the behaviors are non-blocking.
 
 `SimpleSwiftFRP` works very well with Cocoa. Any application event can cause a value to be transmitted through the event stream. Cocoa is one giant event factory. Generally all you need to do is have an event trigger a call to a `Source`'s `send` method and supply a value. The following example is a typical `IBAction` type function that takes the string value of a text field and sends it into the event stream for processing:
 
@@ -214,6 +214,17 @@ In the above example, again assuming that all constants are instances of `Stream
 
 The `filterNil` operator operates in exactly the same way as the `filter` operator, except that it is designed to filter `nil` values only, allowing you to convert a stream of `Optional` values to a stream of non-`Optional` values.
 
+    // Example: filterNil operator syntax
+    let srcA = Source<String>()
+    let streamA = Stream<Int?>()
+    let streamB = Stream<Int>()
+    
+    srcA
+        >-- (streamA, { $0.toInt() })
+        --! streamB
+
+In the example above, a `String`'s `toInt()` method is used to convert `srcA`'s value to an `Int?`, and then the `filterNil` operator is applied to `streamA` such that `streamB` will only pass on values that are non-`nil`.
+
 The left-hand side argument is a `Source`, `Stream` or `Cell` and the right-hand argument is a `Stream`.
 
 The `filterNil` operator supports chaining off of the right-hand side `Stream` in the same manner as the `filter` operator.
@@ -224,6 +235,19 @@ The `filterNil` operator supports chaining off of the right-hand side `Stream` i
     public func --& <T>(streams: [Stream<T>], cell: Cell<T>) -> Cell<T>
     
 The `merge` operator is used to merge multiple `Stream`s of the same type and lift them into a `Cell`. You have the option of providing a closure that will transform the values as they are lifted.
+
+    // Example: merge operator syntax
+    let streamA = Stream<CFTimeInterval>()
+    let streamB = Stream<CFTimeInterval>()
+    let cLatestEvent = Cell<CFTimeInterval>(initialValue: CACurrentMediaTime())
+    
+    [
+        streamA, 
+        streamB
+    ]
+            --& cLatestEvent
+
+In the above example, `streamA` and `streamB` each send values of type `CFTimeInterval`. The `Cell` `cLatestEvent` will update whenever `streamA` or `streamB` fires, storing the value provided. There is no transformation of the value, so no closure parameter is supplied.
 
 When you merge two or more `Stream`s the `Cell` updates its value anytime that one of the `Stream`s sends a value. The `Cell`s value will always be the most recent value passed by any of the component `Stream`s. Note that the transformation closure that can be supplied takes only one value as its input - the value that is passed by whichever `Stream` fired last. It does not take a value for each merged `Stream`.
 
