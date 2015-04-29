@@ -286,11 +286,24 @@ The `lift` operator supports chaining off of the `Cell` on the right-hand side o
     
 The `output` operator is used to attach an `Outlet<T>` to a `Cell<T>`.
 
+    // Example: output operator syntax
+    cellTrueFalse
+        --< (oSetEnabled, { button.enabled = $0 })
+
+In the above example, a `Cell` that stores a `Bool` value is used as input for an `Outlet` that sets whether or not a particular control (in this case a button named `button`) is enabled or disabled. The closure will be called every time that the `Cell`'s value changes. It operates much like a binding between the `Cell`'s value and the state of the control.
+
 The left-hand argument is a `Cell`. The right-hand argument is a tuple composed of the `Outlet` that is being attached and a closure that takes a value of type `T` and performs some output operation with it - e.g., updates the user interface, writes to disk, etc.
 
 In a properly constructed behavior, the `Outlet` is the only part of the event stream that causes any kind of a side-effect in the larger application.
 
 The `output` operator supports chaining off of the left-hand argument (`Cell<T>`) so that you can connect multiple `Outlet`s to a `Cell` in succession in a single chain.
+
+    // Example: chaining with the output operator
+    cellTrueFalse
+        --< (oSetEnabledA, { buttonA.enabled = $0 })
+        --< (oSetEnabledB, { buttonB.enabled = $0 })
+        
+In the above example, the state of two different buttons (`buttonA` and `buttonB`) is bound to the value of the `Cell`. Though it is not enforced, the encouraged practice is to use a separate `Outlet` for every individual side effect that is associated with the `Outlet`.
 
 ## Synchronization
 
