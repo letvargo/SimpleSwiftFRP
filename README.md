@@ -274,8 +274,8 @@ The `lift` operator is used to lift a `Source` or a `Stream` into a `Cell`, or t
 
 The left-hand argument is either a `Source`, a `Stream`, or a tuple made up of two or more `Cell`s. (Right now the maximum number of `Cell`s that can be lifted is seven, but that can be easily expanded.) The right-hand argument is either:
 
- 1. A `Cell<T>` if you are lifting from a `Source<T>` or a `Stream<T>` and not transforming the value; or
- 2. A `Cell<U>` if you are lifting from a `Source<T>` or a `Stream<T>` and you are transforming the value with a closure `T -> U`; or
+ 1. A `Cell<T>` if you are lifting from a `Source<T>` or a `Stream<T>` or a single `Cell<T>` and not transforming the value; or
+ 2. A `Cell<U>` if you are lifting from a `Source<T>` or a `Stream<T>` or a single `Cell<T>` and you are transforming the value with a closure `T -> U`; or
  3. A tuple composed of a `Cell<T>` and a closure that takes as arguments all of the `Cell`s from the left-hand argument and returns a value, `T`.
 
 The `lift` operator supports chaining off of the `Cell` on the right-hand side of the operator.
