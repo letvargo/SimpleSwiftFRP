@@ -31,7 +31,7 @@ public class Source<T>: Whisperer {
         sources = [self]
     }
 
-    public func send(value: T) {
+    public func send(value: T) -> Source<T> {
         send_async {
             let time = now()
             self.synchronized { [unowned self] in
@@ -39,11 +39,13 @@ public class Source<T>: Whisperer {
             }
             self.listeners.notify(.NewEvent(time))
         }
+        return self
     }
     
-    public func send(value: T, callback: () -> ()) {
+    public func send(value: T, callback: () -> ()) -> Source<T> {
         send(value)
         callback()
+        return self
     }
     
     func addListener(listener: Listener) {
