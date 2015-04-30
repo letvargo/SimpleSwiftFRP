@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8B0963E11AEB75F70013C0D1 /* Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0963E01AEB75F70013C0D1 /* Output.swift */; };
-		8B0963E51AEBD31E0013C0D1 /* Send.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0963E41AEBD31E0013C0D1 /* Send.swift */; };
 		8B9D09E91ADD15D700E14446 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9D09E81ADD15D700E14446 /* Result.swift */; };
 		8BB3E6D01AD6232A00E90CFF /* SimpleSwiftFRP.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BB3E6CF1AD6232A00E90CFF /* SimpleSwiftFRP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8BB3E6D61AD6232B00E90CFF /* SimpleSwiftFRP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BB3E6CA1AD6232A00E90CFF /* SimpleSwiftFRP.framework */; };
@@ -39,7 +38,6 @@
 
 /* Begin PBXFileReference section */
 		8B0963E01AEB75F70013C0D1 /* Output.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Output.swift; sourceTree = "<group>"; };
-		8B0963E41AEBD31E0013C0D1 /* Send.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Send.swift; sourceTree = "<group>"; };
 		8B9D09E81ADD15D700E14446 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		8BB3E6CA1AD6232A00E90CFF /* SimpleSwiftFRP.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleSwiftFRP.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BB3E6CE1AD6232A00E90CFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -111,7 +109,6 @@
 				8BE288331AE91EE000425319 /* Merge.swift */,
 				8BB3E6E81AD6237300E90CFF /* Lift.swift */,
 				8B0963E01AEB75F70013C0D1 /* Output.swift */,
-				8B0963E41AEBD31E0013C0D1 /* Send.swift */,
 				8B9D09E81ADD15D700E14446 /* Result.swift */,
 				8BB3E6E71AD6237300E90CFF /* Globals.swift */,
 				8BB3E6E91AD6237300E90CFF /* ObserverSet.swift */,
@@ -261,7 +258,6 @@
 				8BB3E6F51AD6237300E90CFF /* Protocols.swift in Sources */,
 				8BB3E6F01AD6237300E90CFF /* Globals.swift in Sources */,
 				8B9D09E91ADD15D700E14446 /* Result.swift in Sources */,
-				8B0963E51AEBD31E0013C0D1 /* Send.swift in Sources */,
 				8BC92C5F1AE87BE400692152 /* Map.swift in Sources */,
 				8BB3E6F31AD6237300E90CFF /* Outlet.swift in Sources */,
 				8B0963E11AEB75F70013C0D1 /* Output.swift in Sources */,
