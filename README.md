@@ -3,6 +3,8 @@ A simple Functional Reactive Programming library for Swift
 
 Now updated for Swift 1.2.
 
+I am in the process of coding examples. The first, <a href="https://github.com/letvargo/SimpleFRPBindings">`SimpleFRPBindings` is available here</a>.
+
 ## Overview
 
 `SimpleSwiftFRP` is a framework that helps separate program logic from program state. Application events are channeled through an event stream where they are transformed, filtered, stored and otherwise manipulated before being turned into program output.
