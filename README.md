@@ -272,15 +272,60 @@ The `merge` operator supports chaining off of the right-hand `Cell`.
     public func --^<C1, C2, C3, C4, C5, C6, T>(cells: (Cell<C1>, Cell<C2>, Cell<C3>, Cell<C4>, Cell<C5>, Cell<C6>), args: (cell: Cell<T>, f: (C1, C2, C3, C4, C5, C6) -> T)) -> Cell<T>
     public func --^<C1, C2, C3, C4, C5, C6, C7, T>(cells: (Cell<C1>, Cell<C2>, Cell<C3>, Cell<C4>, Cell<C5>, Cell<C6>, Cell<C7>), args: (cell: Cell<T>, f: (C1, C2, C3, C4, C5, C6, C7) -> T)) -> Cell<T>
     
-The `lift` operator is used to lift a `Source` or a `Stream` into a `Cell`, or to lift multiple `Cell`s into another `Cell`.
+The `lift` operator is used to lift a `Source`, `Stream` or `Cell` into a `Cell`, or to lift multiple `Cell`s into another `Cell`.
 
-The left-hand argument is either a `Source`, a `Stream`, or a tuple made up of two or more `Cell`s. (Right now the maximum number of `Cell`s that can be lifted is seven, but that can be easily expanded.) The right-hand argument is either:
+    // Example 1: lift operator syntax
+    let srcNameInput = Source<String>()
+    let cGreeting = Cell<String>(initialValue: "")
+    
+    srcTextInput
+        --^ (cGreeting,  { "Hello, \($0)!" })
+        
+In the above example, we assume that `srcNameInput` takes as input someone's name. That value is transformed into the message, "Hello, \($0)!", and the message is stored in the `cGreeting`.
+
+    // Example 2: lifting multiple cells into a single Cell
+    let srcFirstName = Source<String>()
+    let srcLastName = Source<String>()
+    let cFirstName = Cell<String>(initialValue: "")
+    let cLastName = Cell<String>(initialValue: "")
+    let cFullName = Cell<String>(initialValue: "")
+    
+    srcFirstName
+        --^ cFirstName
+    srcLastName
+        --^ cLastName
+    
+    (
+        cFirstName,
+        cLastName
+    )
+        --^ cFullName
+            
+In the above example, the two `Source`s are first lifted into their own `Cell`s, and then the two `Cell`s are combined into the final `Cell`, `cFullName`.
+
+The left-hand argument is a `Source`, a `Stream`, a `Cell`, or a tuple made up of two or more `Cell`s. (Right now the maximum number of `Cell`s that can be lifted is seven, but that can be easily expanded.) The right-hand argument is either:
 
  1. A `Cell<T>` if you are lifting from a `Source<T>` or a `Stream<T>` or a single `Cell<T>` and not transforming the value; or
  2. A `Cell<U>` if you are lifting from a `Source<T>` or a `Stream<T>` or a single `Cell<T>` and you are transforming the value with a closure `T -> U`; or
  3. A tuple composed of a `Cell<T>` and a closure that takes as arguments all of the `Cell`s from the left-hand argument and returns a value, `T`.
 
-The `lift` operator supports chaining off of the `Cell` on the right-hand side of the operator.
+The `lift` operator supports chaining off of the `Cell` on the right-hand side of the operator. Because it supports chaining, `Example 2` above can be re-written like this:
+
+    // Example 3: chaining with the lift operator
+    (
+        srcFirstName
+            --^ cFirstName,
+        srcLastName
+            --^ cLastName
+    )
+            --^ (cFullName, { $0 + $1 })
+
+In the above example, this expression:
+
+    srcFirstName
+        --^ cFirstName
+
+evaluates to the `Cell`, `cFirstName`. The two lifted `Source`s each evaluate to their respective `Cell`s, allowing you to use those `Cell`s as the tuple parameters in the tuple that is the left-hand argument for the final `lift` operation.
 
 ### The `output` operator: `--<`
 
