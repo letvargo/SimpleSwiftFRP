@@ -281,7 +281,7 @@ The `lift` operator is used to lift a `Source`, `Stream` or `Cell` into a `Cell`
     srcTextInput
         --^ (cGreeting,  { "Hello, \($0)!" })
         
-In the above example, we assume that `srcNameInput` takes as input someone's name. That value is transformed into the message, "Hello, \($0)!", and the message is stored in the `cGreeting`.
+In the above example, we assume that `srcNameInput` takes as input someone's name. That value is transformed into the message, `"Hello, \($0)!"`, and the message is stored in `cGreeting`.
 
     // Example 2: lifting multiple cells into a single Cell
     let srcFirstName = Source<String>()
