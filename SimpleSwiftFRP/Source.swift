@@ -24,12 +24,9 @@ public class Source<T>: Whisperer {
     }
     
     private var listeners: ObserverSet<Command> = ObserverSet<Command>()
-    private var sources: [Whisperer] = []
     private var _f: () -> Result<T> = { _ in .Failure }
     
-    public init() {
-        sources = [self]
-    }
+    public init() { }
 
     public func send(value: T) -> Source<T> {
         send_async {
@@ -42,6 +39,16 @@ public class Source<T>: Whisperer {
         return self
     }
     
+    public func send_main(value: T) {
+        dispatch_async(dispatch_get_main_queue()) {
+            let time = now()
+            self.synchronized { [unowned self] in
+                self._f = { >|value }
+            }
+            self.listeners.notify(.NewEvent(time))
+        }
+    }
+    
     public func send(value: T, callback: () -> ()) -> Source<T> {
         send(value)
         callback()
@@ -50,10 +57,6 @@ public class Source<T>: Whisperer {
     
     func addListener(listener: Listener) {
         listeners.add { listener.didReceiveCommand($0) }
-    }
-    
-    func getSources() -> [Whisperer] {
-        return sources
     }
     
     func f() -> Result<T> {

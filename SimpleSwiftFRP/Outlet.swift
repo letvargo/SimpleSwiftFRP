@@ -20,7 +20,7 @@ public class Outlet<T>: Listener {
     
     func didReceiveCommand(command: Command) {
         switch command {
-        case .Update(let time):
+        case .NewEvent(let time):
             dispatch_async(dispatch_get_main_queue()) { self.f(time) }
         default:
             return

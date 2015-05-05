@@ -10,19 +10,19 @@
 infix operator --! { associativity left }
 
 public func --!<T>(streamA: Stream<T?>, streamB: Stream<T>) -> Stream<T> {
-    return streamB.setSources(streamA.getSources()).setValueFunction { [unowned streamA] in
+    return streamB.listenTo(streamA).setValueFunction { [unowned streamA] in
         streamA.f()>!<
     }
 }
 
 public func --!<T>(source: Source<T?>, stream: Stream<T>) -> Stream<T> {
-    return stream.setSources(source.getSources()).setValueFunction { [unowned source] in
+    return stream.listenTo(source).setValueFunction { [unowned source] in
         source.f()>!<
     }
 }
 
 public func --!<T>(cell: Cell<T?>, stream: Stream<T>) -> Stream<T> {
-    return stream.setSources(cell.getSources()).setValueFunction { [unowned cell] in
+    return stream.listenTo(cell).setValueFunction { [unowned cell] in
         cell.f()>!<
     }
 }

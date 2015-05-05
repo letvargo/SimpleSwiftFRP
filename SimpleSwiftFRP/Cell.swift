@@ -8,11 +8,6 @@
 
 import Foundation
 
-enum CellType<S, T> {
-    case Merged([Stream<S>], S -> T)
-    case LiftedFromOne(Stream<S>, S -> T)
-}
-
 public class Cell<T>: Listener, Whisperer {
     
     typealias Event = (time: Time, value: T)
@@ -30,8 +25,7 @@ public class Cell<T>: Listener, Whisperer {
     }
 
     private var _f: () -> Result<T> = { _ in .Failure }
-    private var sources: [Whisperer] = []
-    private var outlets = ObserverSet<Command>()
+    private var listeners = ObserverSet<Command>()
     private var events: [Event] = []
     private var count = 1
     private var limit: Int = Int.max
@@ -89,7 +83,7 @@ public class Cell<T>: Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: latest, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources(streams.map { $0.getSources() })
+        return self.listenTo(streams)
     }
     
     func liftedFromOne<S>(stream: Stream<S>, f g: S -> T) -> Cell<T> {
@@ -104,7 +98,7 @@ public class Cell<T>: Listener, Whisperer {
                 break
             }
         }
-        return self.withSources([stream.getSources()])
+        return self.listenTo([stream])
     }
     
     func liftedFromOne<S>(source: Source<S>, f g: S -> T) -> Cell<T> {
@@ -119,7 +113,7 @@ public class Cell<T>: Listener, Whisperer {
                 break
             }
         }
-        return self.withSources([source.getSources()])
+        return self.listenTo([source])
     }
     
     func liftedFromOne<S>(cell: Cell<S>, f g: S -> T) -> Cell<T> {
@@ -134,7 +128,7 @@ public class Cell<T>: Listener, Whisperer {
                 break
             }
         }
-        return self.withSources([cell.getSources()])
+        return self.listenTo([cell])
     }
     
     func liftedFromTwo<C1, C2>(a: Cell<C1>, _ b: Cell<C2>, _ g: (C1, C2) -> T) -> Cell<T> {
@@ -145,7 +139,7 @@ public class Cell<T>: Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources([a.getSources(), b.getSources()])
+        return self.listenTo([a, b])
     }
     
     func liftedFromThree<C1, C2, C3>(a: Cell<C1>, _ b: Cell<C2>, _ c: Cell<C3>, _ g: (C1, C2, C3) -> T) -> Cell<T>{
@@ -157,7 +151,7 @@ public class Cell<T>: Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources([a.getSources(), b.getSources(), c.getSources()])
+        return self.listenTo([a, b, c])
     }
     
     func liftedFromFour<C1, C2, C3, C4>(a: Cell<C1>, _ b: Cell<C2>, _ c: Cell<C3>, _ d: Cell<C4>, _ g: (C1, C2, C3, C4) -> T) -> Cell<T> {
@@ -169,7 +163,7 @@ public class Cell<T>: Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources([a.getSources(), b.getSources(), c.getSources(), d.getSources()])
+        return self.self.listenTo([a, b, c, d])
     }
     
     func liftedFromFive<C1, C2, C3, C4, C5>(a: Cell<C1>, _ b: Cell<C2>, _ c: Cell<C3>, _ d: Cell<C4>, _ e: Cell<C5>, _ g: (C1, C2, C3, C4, C5) -> T) -> Cell<T> {
@@ -181,7 +175,7 @@ public class Cell<T>: Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources([a.getSources(), b.getSources(), c.getSources(), d.getSources(), e.getSources()])
+        return self.listenTo([a, b, c, d, e])
     }
     
     func liftedFromSix<C1, C2, C3, C4, C5, C6>(a: Cell<C1>, _ b: Cell<C2>, _ c: Cell<C3>, _ d: Cell<C4>, _ e: Cell<C5>, _ f: Cell<C6>, _ g: (C1, C2, C3, C4, C5, C6) -> T) -> Cell<T> {
@@ -193,7 +187,7 @@ public class Cell<T>: Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources([a.getSources(), b.getSources(), c.getSources(), d.getSources(), e.getSources(), f.getSources()])
+        return self.listenTo([a, b, c, d, e, f])
     }
     
     func liftedFromSeven<C1, C2, C3, C4, C5, C6, C7>(a: Cell<C1>, _ b: Cell<C2>, _ c: Cell<C3>, _ d: Cell<C4>, _ e: Cell<C5>, _ f: Cell<C6>, _ g: Cell<C7>, h: (C1, C2, C3, C4, C5, C6, C7) -> T) -> Cell<T> {
@@ -205,7 +199,7 @@ public class Cell<T>: Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: value, count: self.count, limit: self.limit)
             }
         }
-        return self.withSources([a.getSources(), b.getSources(), c.getSources(), d.getSources(), e.getSources(), f.getSources(), g.getSources()])
+        return self.listenTo([a, b, c, d, e, f, g])
     }
     
     private func addEventWithCountCheck(time: Time, value: T, count: Int, limit: Int) {
@@ -221,37 +215,30 @@ public class Cell<T>: Listener, Whisperer {
         }
     }
     
-    private func withSources(sources: [[Whisperer]]) -> Cell<T> {
-        self.sources = reduceSources(sources)
-        self.sources.reduce(()) { $1.addListener(self) }
+    private func listenTo(whisperers: [Whisperer]) -> Cell<T> {
+        whisperers.reduce(()) { $1.addListener(self) }
         return self
-    }
-    
-    func getSources() -> [Whisperer] {
-        return sources
-    }
-    
-    public func send() {
-        outlets.notify(.Update(now()))
     }
     
     func didReceiveCommand(command: Command) {
         switch command {
         case .NewEvent(let time):
             addNewEvent(time)
-            outlets.notify(.Update(time))
+            if time == events.last?.time {
+                listeners.notify(.NewEvent(time))
+            }
         default:
             return
         }
     }
     
     func addListener(listener: Listener) {
-        outlets.add { listener.didReceiveCommand($0) }
+        listeners.add { listener.didReceiveCommand($0) }
     }
     
     func addOutlet(outlet: Outlet<T>, action: T -> ()) -> Cell<T> {
         outlet.setOutputFunction(self, action: action)
-        outlets.add { outlet.didReceiveCommand($0) }
+        listeners.add { outlet.didReceiveCommand($0) }
         return self
     }
 }
