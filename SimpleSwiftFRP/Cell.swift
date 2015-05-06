@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 letvargo. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 
 public class Cell<T>: Listener, Whisperer {
     
@@ -83,7 +83,7 @@ public class Cell<T>: Listener, Whisperer {
                 self.addEventWithCountCheck(time, value: latest, count: self.count, limit: self.limit)
             }
         }
-        return self.listenTo(streams)
+        return self.listenTo(streams.map { $0 as Whisperer })
     }
     
     func liftedFromOne<S>(stream: Stream<S>, f g: S -> T) -> Cell<T> {
@@ -215,7 +215,7 @@ public class Cell<T>: Listener, Whisperer {
         }
     }
     
-    private func listenTo(whisperers: [Whisperer]) -> Cell<T> {
+    func listenTo(whisperers: [Whisperer]) -> Cell<T> {
         whisperers.reduce(()) { $1.addListener(self) }
         return self
     }
