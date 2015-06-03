@@ -10,8 +10,6 @@
 // which can be found at https://mikeash.com/pyblog/friday-qa-2015-01-23-lets-build-swift-notifications.html
 // It is amazingly useful.
 
-import Foundation
-
 public class ObserverSetEntry<Parameters> {
     
     private weak var object: AnyObject?

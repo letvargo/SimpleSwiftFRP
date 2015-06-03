@@ -2,11 +2,13 @@
 //  Outlet.swift
 //  SimpleSwiftFRP
 //
-//  Created by developer on 2/20/15.
+//  Created by letvargo on 2/20/15.
 //  Copyright (c) 2015 letvargo. All rights reserved.
 //
 
-import Foundation
+public func out<T>(t: T.Type) -> Outlet<T> {
+    return Outlet<T>()
+}
 
 public class Outlet<T>: Listener {
     
@@ -14,16 +16,16 @@ public class Outlet<T>: Listener {
     
     public init() { }
     
-    func setOutputFunction(a: Cell<T>, action: T -> ()) {
-        self.f = { action(a.valueAt($0)) }
+    func setOutputFunction(action: Time -> ()) {
+        self.f = action
     }
     
     func didReceiveCommand(command: Command) {
         switch command {
         case .NewEvent(let time):
-            dispatch_async(dispatch_get_main_queue()) { self.f(time) }
-        default:
-            return
+            dispatch_async( dispatch_get_main_queue()) {
+                self.f(time)
+            }
         }
     }
 }

@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 letvargo. All rights reserved.
 //
 
-import Cocoa
-
 protocol Whisperer: class {
     func addListener(listener: Listener)
 }
