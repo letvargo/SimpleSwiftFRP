@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		57130C9B1B1E87BC0047AF45 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57130C951B1E87BC0047AF45 /* Command.swift */; };
 		57130C9C1B1E87BC0047AF45 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57130C961B1E87BC0047AF45 /* Globals.swift */; };
 		57130C9D1B1E87BC0047AF45 /* ObserverSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57130C971B1E87BC0047AF45 /* ObserverSet.swift */; };
 		57130C9E1B1E87BC0047AF45 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57130C981B1E87BC0047AF45 /* Protocols.swift */; };
@@ -40,7 +39,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		57130C951B1E87BC0047AF45 /* Command.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Command.swift; path = Utilities/Command.swift; sourceTree = "<group>"; };
 		57130C961B1E87BC0047AF45 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Globals.swift; path = Utilities/Globals.swift; sourceTree = "<group>"; };
 		57130C971B1E87BC0047AF45 /* ObserverSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ObserverSet.swift; path = Utilities/ObserverSet.swift; sourceTree = "<group>"; };
 		57130C981B1E87BC0047AF45 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Protocols.swift; path = Utilities/Protocols.swift; sourceTree = "<group>"; };
@@ -87,7 +85,6 @@
 		57B6CDB61B1A3BC200639217 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				57130C951B1E87BC0047AF45 /* Command.swift */,
 				57130C961B1E87BC0047AF45 /* Globals.swift */,
 				57130C971B1E87BC0047AF45 /* ObserverSet.swift */,
 				57130C981B1E87BC0047AF45 /* Protocols.swift */,
@@ -225,6 +222,7 @@
 		8BB3E6C11AD6232A00E90CFF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = letvargo;
 				TargetAttributes = {
@@ -276,7 +274,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57130C9B1B1E87BC0047AF45 /* Command.swift in Sources */,
 				57130CA01B1E87BC0047AF45 /* Time.swift in Sources */,
 				57130CA81B1E87DA0047AF45 /* Input.swift in Sources */,
 				57130CA71B1E87DA0047AF45 /* Accumulate.swift in Sources */,

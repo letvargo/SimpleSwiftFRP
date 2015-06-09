@@ -11,7 +11,6 @@ import CoreMedia
 struct Up {
     static let time = CMTimeMakeWithSeconds(CACurrentMediaTime(), tScale)
     static let notificationQueue = dispatch_queue_create("com.letvargo.NotificationQueue", DISPATCH_QUEUE_SERIAL)
-    static let notificationGroup = dispatch_group_create()
 }
 
 public func id<T>(t: T.Type)(value: T) -> T {

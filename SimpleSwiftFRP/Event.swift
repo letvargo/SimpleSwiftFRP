@@ -15,22 +15,22 @@ public struct Event<T> {
     let f: Time -> T
 
     init(_ value: Value) {
-        self.time = Up.time
-        self.f = { _ in value }
+        time = Up.time
+        f = { _ in value }
     }
 
-    init(_ time: Time, _ value: Value) {
-        self.time = time
-        self.f = { _ in value }
+    init(_ t: Time, _ value: Value) {
+        time = t
+        f = { _ in value }
     }
     
     init(_ f: Time -> Value) {
-        self.time = Up.time
+        time = Up.time
         self.f = f
     }
     
-    init(_ time: Time, _ f: Time -> Value) {
-        self.time = time
+    init(_ t: Time, _ f: Time -> Value) {
+        time = t
         self.f = f
     }
 }

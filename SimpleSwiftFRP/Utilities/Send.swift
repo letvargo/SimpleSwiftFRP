@@ -8,7 +8,7 @@
 
 public func send<T>(src: Source<T>, value: T, callback: (() -> ())? = nil) {
     let t = now()
-    dispatch_group_async(Up.notificationGroup, Up.notificationQueue) {
+    dispatch_async(Up.notificationQueue) {
         src.setNextEvent( { _ in value }).notify(t)
         callback?()
     }
@@ -16,7 +16,7 @@ public func send<T>(src: Source<T>, value: T, callback: (() -> ())? = nil) {
 
 public func send<T>(src: Source<T>, f: Time -> T, callback: (() -> ())? = nil) {
     let t = now()
-    dispatch_group_async(Up.notificationGroup, Up.notificationQueue) {
+    dispatch_async(Up.notificationQueue) {
         src.setNextEvent(f).notify(t)
         callback?()
     }

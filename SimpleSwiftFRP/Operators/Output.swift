@@ -20,9 +20,9 @@ public func --< <A>(
     
     rhs.outlet.setOutputFunction {
     
-        [ unowned ba ] time in
+        [ unowned ba ] t in
         
-        rhs.f(ba.at(time))
+        rhs.f(ba.f(t))
     }
     
     ba.addListener(rhs.outlet)

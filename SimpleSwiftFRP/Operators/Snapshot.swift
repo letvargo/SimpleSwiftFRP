@@ -21,14 +21,14 @@ public func --%<A, B, C>(
     
         [ unowned ba = lhs.ba
         , unowned bb = lhs.bb
-        , unowned bc = rhs.bc ] time in
+        , unowned bc = rhs.bc ] t in
     
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time) )
+              ba.f(t)
+            , bb.f(t) )
     
         bc.appendEvent(
-            Event(time, newValue)
+            Event(t, newValue)
         )
     
         return true
@@ -50,15 +50,15 @@ public func --%<A, B, C>(
     
         [ unowned ba = lhs.ba
         , unowned bb = lhs.bb
-        , unowned bc = rhs.bc ] time in
+        , unowned bc = rhs.bc ] t in
     
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time) )
+              ba.f(t)
+            , bb.f(t) )
         
         if rhs.pred(newValue) {
         
-            bc.appendEvent(Event(time, newValue))
+            bc.appendEvent(Event(t, newValue))
             return true
             
         } else {
@@ -85,15 +85,15 @@ public func --%<A, B, C, D>(
         [ unowned ba = lhs.ba
         , unowned bb = lhs.bb
         , unowned bc = lhs.bc
-        , unowned bd = rhs.bd ] time in
+        , unowned bd = rhs.bd ] t in
     
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time)
-            , bc.at(time) )
+              ba.f(t)
+            , bb.f(t)
+            , bc.f(t) )
     
         bd.appendEvent(
-            Event(time, newValue)
+            Event(t, newValue)
         )
     
         return true
@@ -117,16 +117,16 @@ public func --%<A, B, C, D>(
         [ unowned ba = lhs.ba
         , unowned bb = lhs.bb
         , unowned bc = lhs.bc
-        , unowned bd = rhs.bd ] time in
+        , unowned bd = rhs.bd ] t in
     
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time)
-            , bc.at(time) )
+              ba.f(t)
+            , bb.f(t)
+            , bc.f(t) )
         
         if rhs.pred(newValue) {
         
-            bd.appendEvent(Event(time, newValue))
+            bd.appendEvent(Event(t, newValue))
             return true
             
         } else {
@@ -154,16 +154,16 @@ public func --%<A, B, C, D, E>(
         , unowned bb = lhs.bb
         , unowned bc = lhs.bc
         , unowned bd = lhs.bd
-        , unowned be = rhs.be ] time in
+        , unowned be = rhs.be ] t in
     
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time)
-            , bc.at(time)
-            , bd.at(time) )
+              ba.f(t)
+            , bb.f(t)
+            , bc.f(t)
+            , bd.f(t) )
     
         be.appendEvent(
-            Event(time, newValue)
+            Event(t, newValue)
         )
     
         return true
@@ -188,17 +188,17 @@ public func --%<A, B, C, D, E>(
         , unowned bb = lhs.bb
         , unowned bc = lhs.bc
         , unowned bd = lhs.bd
-        , unowned be = rhs.be ] time in
+        , unowned be = rhs.be ] t in
     
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time)
-            , bc.at(time)
-            , bd.at(time) )
+              ba.f(t)
+            , bb.f(t)
+            , bc.f(t)
+            , bd.f(t) )
         
         if rhs.pred(newValue) {
         
-            be.appendEvent(Event(time, newValue))
+            be.appendEvent(Event(t, newValue))
             return true
             
         } else {
@@ -227,17 +227,17 @@ public func --%<A, B, C, D, E, F>(
         , unowned bc = lhs.bc
         , unowned bd = lhs.bd
         , unowned be = lhs.be
-        , unowned bf = rhs.bf ] time in
+        , unowned bf = rhs.bf ] t in
     
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time)
-            , bc.at(time)
-            , bd.at(time)
-            , be.at(time) )
+              ba.f(t)
+            , bb.f(t)
+            , bc.f(t)
+            , bd.f(t)
+            , be.f(t) )
     
         bf.appendEvent(
-            Event(time, newValue)
+            Event(t, newValue)
         )
     
         return true
@@ -263,18 +263,18 @@ public func --%<A, B, C, D, E, F>(
         , unowned bc = lhs.bc
         , unowned bd = lhs.bd
         , unowned be = lhs.be
-        , unowned bf = rhs.bf ] time in
+        , unowned bf = rhs.bf ] t in
     
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time)
-            , bc.at(time)
-            , bd.at(time)
-            , be.at(time) )
+              ba.f(t)
+            , bb.f(t)
+            , bc.f(t)
+            , bd.f(t)
+            , be.f(t) )
         
         if rhs.pred(newValue) {
         
-            bf.appendEvent(Event(time, newValue))
+            bf.appendEvent(Event(t, newValue))
             return true
             
         } else {
@@ -304,18 +304,18 @@ public func --%<A, B, C, D, E, F, G>(
         , unowned bd = lhs.bd
         , unowned be = lhs.be
         , unowned bf = lhs.bf
-        , unowned bg = rhs.bg ] time in
+        , unowned bg = rhs.bg ] t in
     
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time)
-            , bc.at(time)
-            , bd.at(time)
-            , be.at(time)
-            , bf.at(time) )
+              ba.f(t)
+            , bb.f(t)
+            , bc.f(t)
+            , bd.f(t)
+            , be.f(t)
+            , bf.f(t) )
     
         bg.appendEvent(
-            Event(time, newValue)
+            Event(t, newValue)
         )
     
         return true
@@ -342,19 +342,19 @@ public func --%<A, B, C, D, E, F, G>(
         , unowned bd = lhs.bd
         , unowned be = lhs.be
         , unowned bf = lhs.bf
-        , unowned bg = rhs.bg ] time in
+        , unowned bg = rhs.bg ] t in
     
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time)
-            , bc.at(time)
-            , bd.at(time)
-            , be.at(time)
-            , bf.at(time) )
+              ba.f(t)
+            , bb.f(t)
+            , bc.f(t)
+            , bd.f(t)
+            , be.f(t)
+            , bf.f(t) )
         
         if rhs.pred(newValue) {
         
-            bg.appendEvent(Event(time, newValue))
+            bg.appendEvent(Event(t, newValue))
             return true
             
         } else {

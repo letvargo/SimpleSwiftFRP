@@ -18,9 +18,9 @@ public func --^<A, B>(
     
     return rhs.bb.setFirstEvent(
         Event {
-            [ unowned ba ] time in
+            [ unowned ba ] t in
             
-            rhs.f(ba.at(time))
+            rhs.f(ba.f(t))
         }
     )
         .listenTo(ba)
@@ -38,15 +38,15 @@ public func --^<A, B>(
     
     return rhs.bb.setFirstEvent(
         Event {
-            [ unowned ba ] time in
+            [ unowned ba ] t in
             
-            rhs.f(ba.at(time))
+            rhs.f(ba.f(t))
         }
     ).setAddNewEvent {
         
-        [ unowned ba ] time in
+        [ unowned ba ] t in
         
-        let newValue = rhs.f(ba.at(time))
+        let newValue = rhs.f(ba.f(t))
         
         return rhs.pred(newValue)
     }
@@ -65,11 +65,11 @@ public func --^<A, B, C>(
     return rhs.bc.setFirstEvent(
         Event {
             [ unowned ba = lhs.ba
-            , unowned bb = lhs.bb ] time in
+            , unowned bb = lhs.bb ] t in
             
             rhs.f(
-                  ba.at(time)
-                , bb.at(time)
+                  ba.f(t)
+                , bb.f(t)
             )
         }
     )
@@ -90,21 +90,21 @@ public func --^<A, B, C>(
     return rhs.bc.setFirstEvent(
         Event {
             [ unowned ba = lhs.ba
-            , unowned bb = lhs.bb ] time in
+            , unowned bb = lhs.bb ] t in
             
             rhs.f(
-                  ba.at(time)
-                , bb.at(time)
+                  ba.f(t)
+                , bb.f(t)
             )
         }
     ).setAddNewEvent {
         
         [ unowned ba = lhs.ba
-        , unowned bb = lhs.bb ] time in
+        , unowned bb = lhs.bb ] t in
         
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time) )
+              ba.f(t)
+            , bb.f(t) )
         
         return rhs.pred(newValue)
     }
@@ -126,12 +126,12 @@ public func --^<A, B, C, D>(
         Event {
             [ unowned ba = lhs.ba
             , unowned bb = lhs.bb
-            , unowned bc = lhs.bc ] time in
+            , unowned bc = lhs.bc ] t in
             
             rhs.f(
-                  ba.at(time)
-                , bb.at(time)
-                , bc.at(time) )
+                  ba.f(t)
+                , bb.f(t)
+                , bc.f(t) )
         }
     )
         .listenTo(lhs.ba)
@@ -154,23 +154,23 @@ public func --^<A, B, C, D>(
         Event {
             [ unowned ba = lhs.ba
             , unowned bb = lhs.bb
-            , unowned bc = lhs.bc ] time in
+            , unowned bc = lhs.bc ] t in
             
             rhs.f(
-                  ba.at(time)
-                , bb.at(time)
-                , bc.at(time) )
+                  ba.f(t)
+                , bb.f(t)
+                , bc.f(t) )
         }
     ).setAddNewEvent {
         
         [ unowned ba = lhs.ba
         , unowned bb = lhs.bb
-        , unowned bc = lhs.bc ] time in
+        , unowned bc = lhs.bc ] t in
         
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time)
-            , bc.at(time) )
+              ba.f(t)
+            , bb.f(t)
+            , bc.f(t) )
         
         return rhs.pred(newValue)
     }
@@ -194,13 +194,13 @@ public func --^<A, B, C, D, E>(
             [ unowned ba = lhs.ba
             , unowned bb = lhs.bb
             , unowned bc = lhs.bc
-            , unowned bd = lhs.bd ] time in
+            , unowned bd = lhs.bd ] t in
             
             rhs.f(
-                  ba.at(time)
-                , bb.at(time)
-                , bc.at(time)
-                , bd.at(time) )
+                  ba.f(t)
+                , bb.f(t)
+                , bc.f(t)
+                , bd.f(t) )
         }
     )
         .listenTo(lhs.ba)
@@ -225,25 +225,25 @@ public func --^<A, B, C, D, E>(
             [ unowned ba = lhs.ba
             , unowned bb = lhs.bb
             , unowned bc = lhs.bc
-            , unowned bd = lhs.bd ] time in
+            , unowned bd = lhs.bd ] t in
             rhs.f(
-                ba.at(time)
-              , bb.at(time)
-              , bc.at(time)
-              , bd.at(time) )
+                ba.f(t)
+              , bb.f(t)
+              , bc.f(t)
+              , bd.f(t) )
         }
      ).setAddNewEvent {
         
         [ unowned ba = lhs.ba
         , unowned bb = lhs.bb
         , unowned bc = lhs.bc
-        , unowned bd = lhs.bd ] time in
+        , unowned bd = lhs.bd ] t in
         
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time)
-            , bc.at(time)
-            , bd.at(time) )
+              ba.f(t)
+            , bb.f(t)
+            , bc.f(t)
+            , bd.f(t) )
         
         return rhs.pred(newValue)
     }
@@ -269,14 +269,14 @@ public func --^<A, B, C, D, E, F>(
             , unowned bb = lhs.bb
             , unowned bc = lhs.bc
             , unowned bd = lhs.bd
-            , unowned be = lhs.be ] time in
+            , unowned be = lhs.be ] t in
             
             rhs.f(
-                  ba.at(time)
-                , bb.at(time)
-                , bc.at(time)
-                , bd.at(time)
-                , be.at(time) )
+                  ba.f(t)
+                , bb.f(t)
+                , bc.f(t)
+                , bd.f(t)
+                , be.f(t) )
         }
     )
         .listenTo(lhs.ba)
@@ -303,14 +303,14 @@ public func --^<A, B, C, D, E, F>(
             , unowned bb = lhs.bb
             , unowned bc = lhs.bc
             , unowned bd = lhs.bd
-            , unowned be = lhs.be ] time in
+            , unowned be = lhs.be ] t in
             
             rhs.f(
-                ba.at(time)
-              , bb.at(time)
-              , bc.at(time)
-              , bd.at(time)
-              , be.at(time) )
+                ba.f(t)
+              , bb.f(t)
+              , bc.f(t)
+              , bd.f(t)
+              , be.f(t) )
         }
      ).setAddNewEvent {
         
@@ -318,14 +318,14 @@ public func --^<A, B, C, D, E, F>(
         , unowned bb = lhs.bb
         , unowned bc = lhs.bc
         , unowned bd = lhs.bd
-        , unowned be = lhs.be ] time in
+        , unowned be = lhs.be ] t in
         
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time)
-            , bc.at(time)
-            , bd.at(time)
-            , be.at(time) )
+              ba.f(t)
+            , bb.f(t)
+            , bc.f(t)
+            , bd.f(t)
+            , be.f(t) )
         
         return rhs.pred(newValue)
     }
@@ -353,15 +353,15 @@ public func --^<A, B, C, D, E, F, G>(
             , unowned bc = lhs.bc
             , unowned bd = lhs.bd
             , unowned be = lhs.be
-            , unowned bf = lhs.bf ] time in
+            , unowned bf = lhs.bf ] t in
             
             rhs.f(
-                  ba.at(time)
-                , bb.at(time)
-                , bc.at(time)
-                , bd.at(time)
-                , be.at(time)
-                , bf.at(time) )
+                  ba.f(t)
+                , bb.f(t)
+                , bc.f(t)
+                , bd.f(t)
+                , be.f(t)
+                , bf.f(t) )
         }
     )
         .listenTo(lhs.ba)
@@ -390,15 +390,15 @@ public func --^<A, B, C, D, E, F, G>(
             , unowned bc = lhs.bc
             , unowned bd = lhs.bd
             , unowned be = lhs.be
-            , unowned bf = lhs.bf ] time in
+            , unowned bf = lhs.bf ] t in
             
             rhs.f(
-                ba.at(time)
-              , bb.at(time)
-              , bc.at(time)
-              , bd.at(time)
-              , be.at(time)
-              , bf.at(time) )
+                ba.f(t)
+              , bb.f(t)
+              , bc.f(t)
+              , bd.f(t)
+              , be.f(t)
+              , bf.f(t) )
         }
      ).setAddNewEvent {
         
@@ -407,15 +407,15 @@ public func --^<A, B, C, D, E, F, G>(
         , unowned bc = lhs.bc
         , unowned bd = lhs.bd
         , unowned be = lhs.be
-        , unowned bf = lhs.bf ] time in
+        , unowned bf = lhs.bf ] t in
         
         let newValue = rhs.f(
-              ba.at(time)
-            , bb.at(time)
-            , bc.at(time)
-            , bd.at(time)
-            , be.at(time)
-            , bf.at(time) )
+              ba.f(t)
+            , bb.f(t)
+            , bc.f(t)
+            , bd.f(t)
+            , be.f(t)
+            , bf.f(t) )
         
         return rhs.pred(newValue)
     }

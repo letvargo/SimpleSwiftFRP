@@ -22,19 +22,19 @@ public func --& <A, B>(
         
         .setAddNewEvent {
     
-            [ unowned bb = rhs.bb ] time in
+            [ unowned bb = rhs.bb ] t in
         
             let latest = reduce(1..<bas.count, bas[0], { b, index in
         
-            return bas[index].eventAt(time).time >= b.eventAt(time).time
+            return bas[index].eventAt(t).time >= b.eventAt(t).time
                 ? bas[index]
                 : b
             }
         )
     
-        let newValue = rhs.f(latest.at(time))
+        let newValue = rhs.f(latest.f(t))
         
-        bb.appendEvent(Event(time, newValue))
+        bb.appendEvent(Event(t, newValue))
         
         return true
     }
@@ -54,21 +54,21 @@ public func --& <A, B>(
     
         .setAddNewEvent {
     
-        [ unowned bb = rhs.bb ] time in
+        [ unowned bb = rhs.bb ] t in
         
             let latest = reduce(1..<bas.count, bas[0], { b, index in
         
-            return bas[index].eventAt(time).time >= b.eventAt(time).time
+            return bas[index].eventAt(t).time >= b.eventAt(t).time
                 ? bas[index]
                 : b
             }
         )
     
-        let newValue = rhs.f(latest.at(time))
+        let newValue = rhs.f(latest.f(t))
         
         if rhs.pred(newValue) {
         
-            bb.appendEvent(Event(time, newValue))
+            bb.appendEvent(Event(t, newValue))
             
             return true
             

@@ -19,10 +19,10 @@ public func >-< <T>(
 
     rhs.o.setOutputFunction {
     
-        [ unowned s ] time in
+        [ unowned s ] t in
         
         if let next = s.nextEvent {
-            rhs.f(next(time))
+            rhs.f(next(t))
         }
     }
     
@@ -42,11 +42,11 @@ public func >-< <T>(
 
     rhs.o.setOutputFunction {
     
-        [ unowned s ] time in
+        [ unowned s ] t in
         
-        if let next = s.nextEvent where rhs.pred(next(time) ) {
+        if let next = s.nextEvent where rhs.pred(next(t) ) {
             
-                rhs.f(next(time))
+                rhs.f(next(t))
         }
     }
     
@@ -66,12 +66,12 @@ public func >-< <A, B>(
     rhs.o.setOutputFunction {
     
         [ unowned s = lhs.s
-        , unowned b = lhs.b ] time in
+        , unowned b = lhs.b ] t in
     
         if let next = s.nextEvent {
             rhs.f(
-                  next(time)
-                , b.at(time) )
+                  next(t)
+                , b.f(t) )
         }
     }
     
@@ -91,15 +91,15 @@ public func >-< <A, B>(
     rhs.o.setOutputFunction {
     
         [ unowned s = lhs.s
-        , unowned b = lhs.b ] time in
+        , unowned b = lhs.b ] t in
     
         if let next = s.nextEvent where rhs.pred(
-              next(time)
-            , b.at(time) ) {
+              next(t)
+            , b.f(t) ) {
             
                 rhs.f(
-                      next(time)
-                    , b.at(time) )
+                      next(t)
+                    , b.f(t) )
         }
     }
     
@@ -121,13 +121,13 @@ public func >-< <A, B, C>(
     
         [ unowned sa = lhs.sa
         , unowned bb = lhs.bb
-        , unowned bc = lhs.bc ] time in
+        , unowned bc = lhs.bc ] t in
         
         if let next = sa.nextEvent {
             rhs.f(
-                  next(time)
-                , bb.at(time)
-                , bc.at(time) )
+                  next(t)
+                , bb.f(t)
+                , bc.f(t) )
         }
     }
     
@@ -150,17 +150,17 @@ public func >-< <A, B, C>(
     
         [ unowned sa = lhs.sa
         , unowned bb = lhs.bb
-        , unowned bc = lhs.bc ] time in
+        , unowned bc = lhs.bc ] t in
         
         if let next = sa.nextEvent where rhs.pred(
-              next(time)
-            , bb.at(time)
-            , bc.at(time) ) {
+              next(t)
+            , bb.f(t)
+            , bc.f(t) ) {
             
                 rhs.f(
-                      next(time)
-                    , bb.at(time)
-                    , bc.at(time) )
+                      next(t)
+                    , bb.f(t)
+                    , bc.f(t) )
         }
     }
     
@@ -183,14 +183,14 @@ public func >-< <A, B, C, D>(
         [ unowned sa = lhs.sa
         , unowned bb = lhs.bb
         , unowned bc = lhs.bc
-        , unowned bd = lhs.bd ] time in
+        , unowned bd = lhs.bd ] t in
         
         if let next = sa.nextEvent {
             rhs.f(
-                  next(time)
-                , bb.at(time)
-                , bc.at(time)
-                , bd.at(time))
+                  next(t)
+                , bb.f(t)
+                , bc.f(t)
+                , bd.f(t))
         }
     }
     
@@ -214,19 +214,19 @@ public func >-< <A, B, C, D>(
         [ unowned sa = lhs.sa
         , unowned bb = lhs.bb
         , unowned bc = lhs.bc
-        , unowned bd = lhs.bd ] time in
+        , unowned bd = lhs.bd ] t in
         
         if let next = sa.nextEvent where rhs.pred(
-              next(time)
-            , bb.at(time)
-            , bc.at(time)
-            , bd.at(time) ) {
+              next(t)
+            , bb.f(t)
+            , bc.f(t)
+            , bd.f(t) ) {
             
                 rhs.f(
-                      next(time)
-                    , bb.at(time)
-                    , bc.at(time)
-                    , bd.at(time) )
+                      next(t)
+                    , bb.f(t)
+                    , bc.f(t)
+                    , bd.f(t) )
         }
     }
     
@@ -250,15 +250,15 @@ public func >-< <A, B, C, D, E>(
         , unowned bb = lhs.bb
         , unowned bc = lhs.bc
         , unowned bd = lhs.bd
-        , unowned be = lhs.be ] time in
+        , unowned be = lhs.be ] t in
         
         if let next = sa.nextEvent {
             rhs.f(
-                  next(time)
-                , bb.at(time)
-                , bc.at(time)
-                , bd.at(time)
-                , be.at(time) )
+                  next(t)
+                , bb.f(t)
+                , bc.f(t)
+                , bd.f(t)
+                , be.f(t) )
         }
     }
     
@@ -283,21 +283,21 @@ public func >-< <A, B, C, D, E>(
         , unowned bb = lhs.bb
         , unowned bc = lhs.bc
         , unowned bd = lhs.bd
-        , unowned be = lhs.be ] time in
+        , unowned be = lhs.be ] t in
         
         if let next = sa.nextEvent where rhs.pred(
-              next(time)
-            , bb.at(time)
-            , bc.at(time)
-            , bd.at(time)
-            , be.at(time) ) {
+              next(t)
+            , bb.f(t)
+            , bc.f(t)
+            , bd.f(t)
+            , be.f(t) ) {
             
                 rhs.f(
-                      next(time)
-                    , bb.at(time)
-                    , bc.at(time)
-                    , bd.at(time)
-                    , be.at(time) )
+                      next(t)
+                    , bb.f(t)
+                    , bc.f(t)
+                    , bd.f(t)
+                    , be.f(t) )
         }
     }
     
@@ -322,16 +322,16 @@ public func >-< <A, B, C, D, E, F>(
         , unowned bc = lhs.bc
         , unowned bd = lhs.bd
         , unowned be = lhs.be
-        , unowned bf = lhs.bf ] time in
+        , unowned bf = lhs.bf ] t in
         
         if let next = sa.nextEvent {
             rhs.f(
-                  next(time)
-                , bb.at(time)
-                , bc.at(time)
-                , bd.at(time)
-                , be.at(time)
-                , bf.at(time) )
+                  next(t)
+                , bb.f(t)
+                , bc.f(t)
+                , bd.f(t)
+                , be.f(t)
+                , bf.f(t) )
         }
     }
     
@@ -357,23 +357,23 @@ public func >-< <A, B, C, D, E, F>(
         , unowned bc = lhs.bc
         , unowned bd = lhs.bd
         , unowned be = lhs.be
-        , unowned bf = lhs.bf ] time in
+        , unowned bf = lhs.bf ] t in
         
         if let next = sa.nextEvent where rhs.pred(
-              next(time)
-            , bb.at(time)
-            , bc.at(time)
-            , bd.at(time)
-            , be.at(time)
-            , bf.at(time) ) {
+              next(t)
+            , bb.f(t)
+            , bc.f(t)
+            , bd.f(t)
+            , be.f(t)
+            , bf.f(t) ) {
             
                 rhs.f(
-                      next(time)
-                    , bb.at(time)
-                    , bc.at(time)
-                    , bd.at(time)
-                    , be.at(time)
-                    , bf.at(time) )
+                      next(t)
+                    , bb.f(t)
+                    , bc.f(t)
+                    , bd.f(t)
+                    , be.f(t)
+                    , bf.f(t) )
         }
     }
     

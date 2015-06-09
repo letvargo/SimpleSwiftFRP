@@ -11,5 +11,5 @@ protocol Whisperer: class {
 }
 
 protocol Listener: class {
-    func didReceiveCommand(command: Command)
+    func receiveNotification(t: Time)
 }

@@ -20,12 +20,9 @@ public class Outlet<T>: Listener {
         self.f = action
     }
     
-    func didReceiveCommand(command: Command) {
-        switch command {
-        case .NewEvent(let time):
-            dispatch_async( dispatch_get_main_queue()) {
-                self.f(time)
-            }
+    func receiveNotification(t: Time) {
+        dispatch_async( dispatch_get_main_queue()) {
+            self.f(t)
         }
     }
 }

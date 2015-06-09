@@ -19,11 +19,11 @@ public func >-- <T>(
     return b.setAddNewEvent {
     
         [ unowned s
-        , unowned b ] time in
+        , unowned b ] t in
         
         if let next = s.nextEvent {
         
-            b.appendEvent(Event(time, next))
+            b.appendEvent(Event(t, next))
             return true
         
         } else {
@@ -47,12 +47,12 @@ public func >-- <T>(
     return rhs.b.setAddNewEvent {
     
         [ unowned s
-        , unowned b = rhs.b ] time in
+        , unowned b = rhs.b ] t in
         
         if let next = s.nextEvent
-            where rhs.pred(next(time)) {
+            where rhs.pred(next(t)) {
         
-            b.appendEvent(Event(time, next))
+            b.appendEvent(Event(t, next))
             return true
             
         } else {

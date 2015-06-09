@@ -13,75 +13,68 @@ public prefix func ^<T>(value: T) -> Behavior<T> {
 }
 
 public class Behavior<T>: Listener, Whisperer {
-
-    typealias Value = T
-    
-    private let syncQueue =
-        dispatch_queue_create(
-              "com.letvargo.SyncCellQueue"
-            , DISPATCH_QUEUE_SERIAL )
     
     private func synchronized(f: () -> ()) {
-        dispatch_sync(syncQueue, f)
+        dispatch_sync(Up.notificationQueue, f)
     }
     
-    public var value: Value {
+    public var value: T {
         get {
-            dispatch_group_wait(
-                  Up.notificationGroup
-                , DISPATCH_TIME_FOREVER  )
-            
             var v: T? = nil
             synchronized {
-                v = self.at(now())
+                let t = now()
+                v = self.eventAt(t).f(t)
             }
             return v ?? events[0].f(now())
         }
     }
     
-    private var listeners = ObserverSet<Command>()
-    
+    private var listeners = ObserverSet<Time>()
     private var events: [Event<T>] = []
-    
     private var count = 1
-    
     private var addNewEvent: Time -> Bool = { _ in return true }
     
     public init(_ value: T) {
-        self.events = [Event(value)]
+        events = [Event(value)]
     }
     
     public init(_ f: Time -> T) {
-        self.events = [Event(f)]
+        events = [Event(f)]
     }
     
-    func eventAt(time: Time) -> Event<T> {
+    func eventAt(t: Time) -> Event<T> {
             
-        var i = self.count - 1
+        var i = count - 1
         while i > 0 {
-            let e = self.events[i]
-            if e.time <= time {
+            let e = events[i]
+            if e.time <= t {
                 return e
             } else {
                 --i
             }
         }
-        return self.events[0]
+        return events[0]
     }
     
-    func at(time: Time) -> Value {
-        return eventAt(time).f(time)
+    public func at(t: Time) -> T {
+        var v: T? = nil
+        synchronized {
+            v = self.eventAt(t).f(t)
+        }
+        return v ?? events[0].f(t)
+    }
+    
+    func f(t: Time) -> T {
+        return eventAt(t).f(t)
     }
     
     func appendEvent(event: Event<T>) {
-        synchronized {
-            self.events.append(event)
-            self.count = self.count + 1
-        }
+        events.append(event)
+        count = count + 1
     }
     
     func setAddNewEvent(f: Time -> Bool) -> Behavior<T> {
-        self.addNewEvent = f
+        addNewEvent = f
         return self
     }
     
@@ -95,16 +88,13 @@ public class Behavior<T>: Listener, Whisperer {
         return self
     }
     
-    func didReceiveCommand(command: Command) {
-        switch command {
-        case .NewEvent(let time):
-            if addNewEvent(time) {
-                listeners.notify(.NewEvent(time))
-            }
+    func receiveNotification(t: Time) {
+        if addNewEvent(t) {
+            listeners.notify(t)
         }
     }
     
     func addListener(listener: Listener) {
-        listeners.add { listener.didReceiveCommand($0) }
+        listeners.add { listener.receiveNotification($0) }
     }
 }
