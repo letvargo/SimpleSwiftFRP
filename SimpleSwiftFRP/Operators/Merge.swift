@@ -24,7 +24,7 @@ public func --& <A, B>(
     
             [ unowned bb = rhs.bb ] t in
         
-            let latest = reduce(1..<bas.count, bas[0], { b, index in
+            let latest = (1..<bas.count).reduce(bas[0], combine: { b, index in
         
             return bas[index].eventAt(t).time >= b.eventAt(t).time
                 ? bas[index]
@@ -56,7 +56,7 @@ public func --& <A, B>(
     
         [ unowned bb = rhs.bb ] t in
         
-            let latest = reduce(1..<bas.count, bas[0], { b, index in
+            let latest = (1..<bas.count).reduce(bas[0], combine: { b, index in
         
             return bas[index].eventAt(t).time >= b.eventAt(t).time
                 ? bas[index]

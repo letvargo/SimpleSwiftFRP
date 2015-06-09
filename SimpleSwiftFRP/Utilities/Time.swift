@@ -15,7 +15,7 @@ public let tScale: Int32 = 1440000
 extension Time: Comparable {
     
     public var isValid: Bool {
-        return (self.flags & CMTimeFlags.Valid).rawValue != 0
+        return self.flags.rawValue & CMTimeFlags.Valid.rawValue != 0
     }
     
     public var isInvalid: Bool {
@@ -23,23 +23,23 @@ extension Time: Comparable {
     }
     
     public var isNegativeInfinity: Bool {
-        return (self.flags & CMTimeFlags.NegativeInfinity).rawValue != 0
+        return self.flags.rawValue & CMTimeFlags.NegativeInfinity.rawValue != 0
     }
     
     public var isPositiveInfinity: Bool {
-        return (self.flags & CMTimeFlags.PositiveInfinity).rawValue != 0
+        return self.flags.rawValue & CMTimeFlags.PositiveInfinity.rawValue != 0
     }
     
     public var isIndefinite: Bool {
-        return self.isValid && (self.flags & CMTimeFlags.Indefinite).rawValue != 0
+        return self.isValid && (self.flags.rawValue & CMTimeFlags.Indefinite.rawValue != 0)
     }
     
     public var isNumeric: Bool {
-        return (self.flags & (CMTimeFlags.Valid | CMTimeFlags.ImpliedValueFlagsMask)) == CMTimeFlags.Valid
+        return (self.flags.rawValue & (CMTimeFlags.Valid.rawValue | CMTimeFlags.ImpliedValueFlagsMask.rawValue)) == CMTimeFlags.Valid.rawValue
     }
     
     public var hasBeenRounded: Bool {
-        return self.isNumeric && (self.flags & CMTimeFlags.HasBeenRounded).rawValue != 0
+        return self.isNumeric && (self.flags.rawValue & CMTimeFlags.HasBeenRounded.rawValue) != 0
     }
     
     public var timeSince: Time {
