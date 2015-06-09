@@ -10,7 +10,7 @@ public func src<T>(t: T.Type) -> Source<T> {
     return Source<T>()
 }
 
-public class Source<T>: Whisperer {
+final public class Source<T>: Whisperer {
 
     var nextEvent: (Time -> T)? {
         return self._nextEvent

@@ -12,7 +12,7 @@ public prefix func ^<T>(value: T) -> Behavior<T> {
     return Behavior(value)
 }
 
-public class Behavior<T>: Listener, Whisperer {
+final public class Behavior<T>: Listener, Whisperer {
     
     private func synchronized(f: () -> ()) {
         dispatch_sync(Up.notificationQueue, f)

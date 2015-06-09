@@ -10,7 +10,7 @@ public func out<T>(t: T.Type) -> Outlet<T> {
     return Outlet<T>()
 }
 
-public class Outlet<T>: Listener {
+final public class Outlet<T>: Listener {
     
     private var f: Time -> () = { _ in return }
     
