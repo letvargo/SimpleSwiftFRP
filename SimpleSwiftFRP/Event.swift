@@ -6,30 +6,28 @@
 //  Copyright (c) 2015 letvargo. All rights reserved.
 //
 
-public struct Event<T> {
-
-    typealias Value = T
+struct Event<T> {
 
     let time: Time
     
     let f: Time -> T
 
-    init(_ value: Value) {
+    init(_ value: T) {
         time = Up.time
         f = { _ in value }
     }
 
-    init(_ t: Time, _ value: Value) {
+    init(_ t: Time, _ value: T) {
         time = t
         f = { _ in value }
     }
     
-    init(_ f: Time -> Value) {
+    init(_ f: Time -> T) {
         time = Up.time
         self.f = f
     }
     
-    init(_ t: Time, _ f: Time -> Value) {
+    init(_ t: Time, _ f: Time -> T) {
         time = t
         self.f = f
     }

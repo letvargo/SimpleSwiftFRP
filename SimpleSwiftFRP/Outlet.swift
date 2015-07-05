@@ -17,11 +17,11 @@ final public class Outlet<T>: Listener {
     public init() { }
     
     func setOutputFunction(action: Time -> ()) {
-        self.f = action
+        f = action
     }
     
     func receiveNotification(t: Time) {
-        dispatch_async( dispatch_get_main_queue()) {
+        dispatch_async(dispatch_get_main_queue()) {
             self.f(t)
         }
     }

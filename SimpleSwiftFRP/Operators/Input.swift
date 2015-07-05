@@ -15,7 +15,7 @@ public func >-- <T>(
     b:      Behavior<T> )
     
     ->      Behavior<T> {
-
+        
     return b.setAddNewEvent {
     
         [ unowned s

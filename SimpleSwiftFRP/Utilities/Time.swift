@@ -49,14 +49,6 @@ extension Time: Comparable {
     public var inSeconds: Double {
         return CMTimeGetSeconds(self)
     }
-    
-    public init() {
-        let t0 = CMTimeMakeWithSeconds(CACurrentMediaTime(), tScale)
-        self.value = t0.value
-        self.timescale = t0.timescale
-        self.epoch = t0.epoch
-        self.flags = t0.flags
-    }
 }
 
 public func now() -> Time {

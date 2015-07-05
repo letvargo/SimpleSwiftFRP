@@ -28,7 +28,7 @@ final public class Behavior<T>: Listener, Whisperer {
             return v ?? events[0].f(now())
         }
     }
-    
+
     private var listeners = ObserverSet<Time>()
     private var events: [Event<T>] = []
     private var count = 1
