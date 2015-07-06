@@ -10,24 +10,28 @@ public func send<T>(
       src: Source<T>
     , value: T
     , onQueue queue: dispatch_queue_t = Up.notificationQueue
-    , callback: (() -> ())? = nil ) {
+    , callback: (() -> ())? = nil ) -> Time {
     
     let t = now()
     dispatch_async(queue) {
         src.notify({ _ in value }, time: t)
         callback?()
     }
+    
+    return t
 }
 
 public func send<T>(
     src: Source<T>
     , f: Time -> T
     , onQueue queue: dispatch_queue_t = Up.notificationQueue
-    , callback: (() -> ())? = nil ) {
+    , callback: (() -> ())? = nil ) -> Time {
         
     let t = now()
     dispatch_async(queue) {
         src.notify(f, time: t)
         callback?()
     }
+    
+    return t
 }

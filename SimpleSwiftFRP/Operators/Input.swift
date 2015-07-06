@@ -21,7 +21,7 @@ public func >-- <T>(
         [ unowned s
         , unowned b ] t in
         
-        if let next = s.nextEvent {
+        if let next = s.value {
         
             b.appendEvent(Event(t, next))
             return true
@@ -49,7 +49,7 @@ public func >-- <T>(
         [ unowned s
         , unowned b = rhs.b ] t in
         
-        if let next = s.nextEvent
+        if let next = s.value
             where rhs.pred(next(t)) {
         
             b.appendEvent(Event(t, next))

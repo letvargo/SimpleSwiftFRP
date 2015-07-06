@@ -21,7 +21,7 @@ public func >-< <T>(
     
         [ unowned s ] t in
         
-        if let next = s.nextEvent {
+        if let next = s.value {
             rhs.f(next(t))
         }
     }
@@ -44,7 +44,7 @@ public func >-< <T>(
     
         [ unowned s ] t in
         
-        if let next = s.nextEvent where rhs.pred(next(t) ) {
+        if let next = s.value where rhs.pred(next(t) ) {
             
                 rhs.f(next(t))
         }
@@ -68,7 +68,7 @@ public func >-< <A, B>(
         [ unowned s = lhs.s
         , unowned b = lhs.b ] t in
     
-        if let next = s.nextEvent {
+        if let next = s.value {
             rhs.f(
                   next(t)
                 , b.f(t) )
@@ -93,7 +93,7 @@ public func >-< <A, B>(
         [ unowned s = lhs.s
         , unowned b = lhs.b ] t in
     
-        if let next = s.nextEvent where rhs.pred(
+        if let next = s.value where rhs.pred(
               next(t)
             , b.f(t) ) {
             
@@ -123,7 +123,7 @@ public func >-< <A, B, C>(
         , unowned bb = lhs.bb
         , unowned bc = lhs.bc ] t in
         
-        if let next = sa.nextEvent {
+        if let next = sa.value {
             rhs.f(
                   next(t)
                 , bb.f(t)
@@ -152,7 +152,7 @@ public func >-< <A, B, C>(
         , unowned bb = lhs.bb
         , unowned bc = lhs.bc ] t in
         
-        if let next = sa.nextEvent where rhs.pred(
+        if let next = sa.value where rhs.pred(
               next(t)
             , bb.f(t)
             , bc.f(t) ) {
@@ -185,7 +185,7 @@ public func >-< <A, B, C, D>(
         , unowned bc = lhs.bc
         , unowned bd = lhs.bd ] t in
         
-        if let next = sa.nextEvent {
+        if let next = sa.value {
             rhs.f(
                   next(t)
                 , bb.f(t)
@@ -216,7 +216,7 @@ public func >-< <A, B, C, D>(
         , unowned bc = lhs.bc
         , unowned bd = lhs.bd ] t in
         
-        if let next = sa.nextEvent where rhs.pred(
+        if let next = sa.value where rhs.pred(
               next(t)
             , bb.f(t)
             , bc.f(t)
@@ -252,7 +252,7 @@ public func >-< <A, B, C, D, E>(
         , unowned bd = lhs.bd
         , unowned be = lhs.be ] t in
         
-        if let next = sa.nextEvent {
+        if let next = sa.value {
             rhs.f(
                   next(t)
                 , bb.f(t)
@@ -285,7 +285,7 @@ public func >-< <A, B, C, D, E>(
         , unowned bd = lhs.bd
         , unowned be = lhs.be ] t in
         
-        if let next = sa.nextEvent where rhs.pred(
+        if let next = sa.value where rhs.pred(
               next(t)
             , bb.f(t)
             , bc.f(t)
@@ -324,7 +324,7 @@ public func >-< <A, B, C, D, E, F>(
         , unowned be = lhs.be
         , unowned bf = lhs.bf ] t in
         
-        if let next = sa.nextEvent {
+        if let next = sa.value {
             rhs.f(
                   next(t)
                 , bb.f(t)
@@ -359,7 +359,7 @@ public func >-< <A, B, C, D, E, F>(
         , unowned be = lhs.be
         , unowned bf = lhs.bf ] t in
         
-        if let next = sa.nextEvent where rhs.pred(
+        if let next = sa.value where rhs.pred(
               next(t)
             , bb.f(t)
             , bc.f(t)
