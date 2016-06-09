@@ -22,32 +22,10 @@ class SimpleSwiftFRPTests: XCTestCase {
         super.tearDown()
     }
     
-//    func testExample() {
-//        // This is an example of a functional test case.
-//        let sourceA = Source<Int>()
-//        let sourceB = Source<Int>()
-//        let cellA = Cell<Int>(initialValue: 9)
-//        let cellB = Cell<Int>(initialValue: 13)
-//        let cellC = Cell<Int>(initialValue: 22)
-//        let outlet = Outlet<Int>()
-//        
-//        sourceA
-//            --^ (cellA, id)
-//        sourceB
-//            --^ (cellB, id)
-//            (cellA, cellB)
-//                --^ (cellC, { $0 + $1 })
-//                --< (outlet, { println($0) })
-//        
-//        
-//        XCTAssert(true, "Pass")
-//    }
-    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure() {
             // Put the code you want to measure the time of here.
         }
     }
-    
 }
