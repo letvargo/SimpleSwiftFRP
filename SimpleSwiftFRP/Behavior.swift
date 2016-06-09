@@ -89,7 +89,7 @@ final public class Behavior<T>: Listener, Whisperer {
         return at(time: now())
     }
     
-    /// A set of objects that will be notified whenever the `Behavior`'s is notified of a new `Event`
+    /// A set of objects that will be notified whenever the `Behavior` is notified of a new `Event`
     
     private var listeners = ObserverSet<Time>()
     
@@ -109,7 +109,7 @@ final public class Behavior<T>: Listener, Whisperer {
     ///
     /// - Returns: A `Bool` value that indicates whether or not the `Behavior`'s listeners should be notified of the new event.
     
-    private var addNewEvent: Time -> Bool = { _ in return true }
+    private var addNewEvent: (Time) -> Bool = { _ in return true }
 
     /// Initializes a `Behavior<T>` with the given initial value
     ///
@@ -123,7 +123,7 @@ final public class Behavior<T>: Listener, Whisperer {
     ///
     /// - Parameter f: The initial value function of the `Behavior<T>`. The value function must be of the form `Time -> T`
     
-    public init(_ f: Time -> T) {
+    public init(_ f: (Time) -> T) {
         events = [Event(f)]
     }
     
@@ -145,7 +145,7 @@ final public class Behavior<T>: Listener, Whisperer {
             if e.time <= t {
                 return e
             } else {
-                --i
+                i -= 1
             }
         }
         return events[0]
@@ -160,7 +160,7 @@ final public class Behavior<T>: Listener, Whisperer {
     public func at(time t: Time) -> T {
         var v: T? = nil
         synchronized {
-            v = self.eventAt(t).f(t)
+            v = self.eventAt(t: t).f(t)
         }
         return v ?? events[0].f(t)
     }
@@ -170,23 +170,24 @@ final public class Behavior<T>: Listener, Whisperer {
     /// This method is not synchronized and should only be invoked from inside of a single transaction for purposes of calculating a new value for the `Behavior<T>`.
     
     func f(t: Time) -> T {
-        return eventAt(t).f(t)
+        return eventAt(t: t).f(t)
     }
     
     /// Adds a new `Event` to the `events` array and updates the `count` property
     ///
     /// This method is the only available means of adding an `Event` to the `events` array. By making `events` and `count` private and updating them only through this method, we can be sure that the `count` property will always remain in sync with the size of `events`.
     
-    func appendEvent(event: Event<T>) {
+    func appendEvent(event: Event<T>) -> Bool {
         events.append(event)
         count = count + 1
+        return true
     }
     
     /// Sets the `addNewEvent` property for the `Behavior<T>`
     ///
     /// This method is invoked when the `Behavior<T>` is connected to another object using one of the primitive infix operators and should not be invoked from anywhere else.
     
-    func setAddNewEvent(f: Time -> Bool) -> Behavior<T> {
+    func setAddNewEvent(f: (Time) -> Bool) -> Behavior<T> {
         addNewEvent = f
         return self
     }
@@ -209,7 +210,7 @@ final public class Behavior<T>: Listener, Whisperer {
     /// - Returns: `Behavior<T>`. The `Behavior<T>` is returned so that multiple calls to `listenTo:` can be chained together.
 
     func listenTo(whisperer: Whisperer) -> Behavior<T> {
-        whisperer.addListener(self)
+        whisperer.addListener(listener: self)
         return self
     }
     
@@ -228,7 +229,7 @@ final public class Behavior<T>: Listener, Whisperer {
             // ...and if it returns true,
             // notify all listeners
             
-            listeners.notify(t)
+            listeners.notify(parameters: t)
         }
     }
     
@@ -237,6 +238,8 @@ final public class Behavior<T>: Listener, Whisperer {
     /// This method is required by the `Whisperer` protocol.
     
     func addListener(listener: Listener) {
-        listeners.add { listener.receiveNotification($0) }
+        _ = listeners.add { time in
+            listener.receiveNotification(t: time)
+        }
     }
 }

@@ -13,8 +13,8 @@ public func --< <A>(
 
     ba:     Behavior<A>,
     
-    rhs:    ( outlet: Outlet<A>
-            , f: A -> () ) )
+    rhs:    ( outlet: Outlet
+            , f: (A) -> () ) )
     
     -> Behavior<A> {
     
@@ -22,10 +22,10 @@ public func --< <A>(
     
         [ unowned ba ] t in
         
-        rhs.f(ba.f(t))
+        rhs.f(ba.f(t: t))
     }
     
-    ba.addListener(rhs.outlet)
+    ba.addListener(listener: rhs.outlet)
     
     return ba
 }

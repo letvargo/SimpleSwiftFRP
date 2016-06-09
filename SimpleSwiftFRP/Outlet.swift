@@ -6,17 +6,17 @@
 //  Copyright (c) 2015 letvargo. All rights reserved.
 //
 
-public func out<T>(t: T.Type) -> Outlet<T> {
-    return Outlet<T>()
+public func out<T>(t: T.Type) -> Outlet {
+    return Outlet()
 }
 
-final public class Outlet<T>: Listener {
+final public class Outlet: Listener {
     
-    private var f: Time -> () = { _ in return }
+    private var f: (Time) -> () = { _ in return }
     
     public init() { }
     
-    func setOutputFunction(action: Time -> ()) {
+    func setOutputFunction(action: (Time) -> ()) {
         f = action
     }
     

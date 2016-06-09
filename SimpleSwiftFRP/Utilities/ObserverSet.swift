@@ -13,9 +13,9 @@
 public class ObserverSetEntry<Parameters> {
     
     private weak var object: AnyObject?
-    private let f: AnyObject -> Parameters -> Void
+    private let f: (AnyObject) -> (Parameters) -> Void
     
-    private init(object: AnyObject, _ f: AnyObject -> Parameters -> Void) {
+    private init(object: AnyObject, _ f: (AnyObject) -> (Parameters) -> Void) {
         self.object = object
         self.f = f
     }
@@ -23,23 +23,23 @@ public class ObserverSetEntry<Parameters> {
 
 public class ObserverSet<Parameters> {
     
-    private let queue = dispatch_queue_create("com.letvargo.ObserverSet", nil)
+    private let queue: dispatch_queue_t = dispatch_queue_create("com.letvargo.ObserverSet", nil)
     private var entries: [ObserverSetEntry<Parameters>] = []
     
     public init() { }
     
-    private func synchronized(f: Void -> Void) {
+    private func synchronized(f: (Void) -> Void) {
         dispatch_sync(queue, f)
     }
     
-    public func add<T: AnyObject>(object: T, _ f: T -> Parameters -> Void) -> ObserverSetEntry<Parameters> {
+    public func add<T: AnyObject>(object: T, _ f: (T) -> (Parameters) -> Void) -> ObserverSetEntry<Parameters> {
         let entry = ObserverSetEntry<Parameters>(object: object, { f($0 as! T) })
         synchronized { self.entries.append(entry) }
         return entry
     }
     
-    public func add(f: Parameters -> Void) -> ObserverSetEntry<Parameters> {
-        return self.add(self, { ignored in f })
+    public func add(f: (Parameters) -> Void) -> ObserverSetEntry<Parameters> {
+        return self.add(object: self, { ignored in f })
     }
     
     public func remove(entry: ObserverSetEntry<Parameters>) {
@@ -49,15 +49,16 @@ public class ObserverSet<Parameters> {
     }
     
     public func notify(parameters: Parameters) {
-        var toCall: [Parameters -> Void] = []
+        var toCall: [(Parameters) -> Void] = []
         synchronized {
-            self.entries.reduce(()) {
-                if let obj: AnyObject = $1.object {
-                    toCall.append($1.f(obj))
+            self.entries.forEach {
+                if let obj: AnyObject = $0.object {
+                    toCall.append($0.f(obj))
                 }
             }
             self.entries = self.entries.filter { $0 != nil }
         }
-        toCall.reduce(()) { $1(parameters) }
+        
+        toCall.forEach { $0(parameters) }
     }
 }

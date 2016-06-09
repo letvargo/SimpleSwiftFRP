@@ -14,67 +14,71 @@ public func --& <A, B>(
     bas:    [ Behavior<A> ],
     
     rhs:    ( bb: Behavior<B>
-            , f: A -> B ) )
+            , f: (A) -> B ) )
     
     -> Behavior<B> {
         
-    return bas.reduce(rhs.bb) { $0.listenTo($1) }
+        bas.forEach {
+            _ = rhs.bb.listenTo(whisperer: $0)
+        }
         
-        .setAddNewEvent {
+    return rhs.bb.setAddNewEvent {
     
             [ unowned bb = rhs.bb ] t in
         
             let latest = (1..<bas.count).reduce(bas[0], combine: { b, index in
         
-            return bas[index].eventAt(t).time >= b.eventAt(t).time
+                return bas[index].eventAt(t: t).time >= b.eventAt(t: t).time
                 ? bas[index]
                 : b
             }
         )
     
-        let newValue = rhs.f(latest.f(t))
+        let newValue = rhs.f(latest.f(t: t))
         
-        bb.appendEvent(Event(t, newValue))
+        _ = bb.appendEvent(event: Event(t, newValue))
         
         return true
     }
 }
 
-public func --& <A, B>(
-
-    bas:    [ Behavior<A> ],
-    
-    rhs:    ( bb: Behavior<B>
-            , f: A -> B
-            , pred: B -> Bool ) )
-    
-    -> Behavior<B> {
-        
-    return bas.reduce(rhs.bb) { $0.listenTo($1) }
-    
-        .setAddNewEvent {
-    
-        [ unowned bb = rhs.bb ] t in
-        
-            let latest = (1..<bas.count).reduce(bas[0], combine: { b, index in
-        
-            return bas[index].eventAt(t).time >= b.eventAt(t).time
-                ? bas[index]
-                : b
-            }
-        )
-    
-        let newValue = rhs.f(latest.f(t))
-        
-        if rhs.pred(newValue) {
-        
-            bb.appendEvent(Event(t, newValue))
-            
-            return true
-            
-        } else {
-        
-            return false
-        }
-    }
-}
+//public func --& <A, B>(
+//
+//    bas:    [ Behavior<A> ],
+//    
+//    rhs:    ( bb: Behavior<B>
+//            , f: (A) -> B
+//            , pred: (B) -> Bool ) )
+//    
+//    -> Behavior<B> {
+//        
+//    return bas.reduce(rhs.bb) {
+//        (bb: Behavior<B>, ba: Behavior<A>) -> Behavior<B> in
+//        bb.listenTo(whisperer: ba) }
+//    
+//        .setAddNewEvent {
+//    
+//        [ unowned bb = rhs.bb ] t in
+//        
+//            let latest = (1..<bas.count).reduce(bas[0], combine: { b, index in
+//        
+//                return bas[index].eventAt(t: t).time >= b.eventAt(t).time
+//                ? bas[index]
+//                : b
+//            }
+//        )
+//    
+//        let newValue = rhs.f(latest.f(t))
+//        
+//        if rhs.pred(newValue) {
+//        
+//            _ = bb.appendEvent(event: Event(t, newValue))
+//            
+//            return true
+//            
+//        } else {
+//        
+//            return false
+//        }
+//    }
+//}

@@ -8,14 +8,14 @@
 
 infix operator >-< { associativity left }
 
-public func >-< <T>(
+public func >-< <A>(
 
-    s:      Source<T>,
+    s:      Source<A>,
     
-    rhs:    ( o: Outlet<T>
-            , f: T -> () ) )
+    rhs:    ( o: Outlet
+            , f: (A) -> () ) )
 
-    ->      Source<T> {
+    ->      Source<A> {
 
     rhs.o.setOutputFunction {
     
@@ -26,19 +26,19 @@ public func >-< <T>(
         }
     }
     
-    s.addListener(rhs.o)
+    s.addListener(listener: rhs.o)
     return s
 }
 
-public func >-< <T>(
+public func >-< <A>(
 
-    s:      Source<T>,
+    s:      Source<A>,
     
-    rhs:    ( o: Outlet<T>
-            , f: T -> ()
-            , pred: T -> Bool ) )
+    rhs:    ( o: Outlet
+            , f: (A) -> ()
+            , pred: (A) -> Bool ) )
 
-    ->      Source<T> {
+    ->      Source<A> {
 
     rhs.o.setOutputFunction {
     
@@ -50,7 +50,7 @@ public func >-< <T>(
         }
     }
     
-    s.addListener(rhs.o)
+    s.addListener(listener: rhs.o)
     return s
 }
 
@@ -58,7 +58,7 @@ public func >-< <A, B>(
 
     lhs:    ( s: Source<A>, b: Behavior<B> ),
     
-    rhs:    ( o: Outlet<A>
+    rhs:    ( o: Outlet
             , f: (A, B) -> () ) )
     
     ->      Source<A> {
@@ -71,18 +71,18 @@ public func >-< <A, B>(
         if let next = s.value {
             rhs.f(
                   next(t)
-                , b.f(t) )
+                , b.f(t: t) )
         }
     }
     
-    lhs.s.addListener(rhs.o)
+    lhs.s.addListener(listener: rhs.o)
     return lhs.s
 }
 
 public func >-< <A, B>(
 
     lhs:    ( s: Source<A>, b: Behavior<B> ),
-    rhs:    ( o: Outlet<A>
+    rhs:    ( o: Outlet
             , f: (A, B) -> ()
             , pred: (A, B) -> Bool ) )
     
@@ -95,15 +95,15 @@ public func >-< <A, B>(
     
         if let next = s.value where rhs.pred(
               next(t)
-            , b.f(t) ) {
+            , b.f(t: t) ) {
             
                 rhs.f(
                       next(t)
-                    , b.f(t) )
+                    , b.f(t: t) )
         }
     }
     
-    lhs.s.addListener(rhs.o)
+    lhs.s.addListener(listener: rhs.o)
     return lhs.s
 }
 
@@ -112,7 +112,7 @@ public func >-< <A, B, C>(
     lhs:    ( sa: Source<A>, bb: Behavior<B>
             , bc: Behavior<C> ),
     
-    rhs:    ( o: Outlet<A>
+    rhs:    ( o: Outlet
             , f: (A, B, C) -> () ) )
     
     ->      Source<A> {
@@ -126,12 +126,12 @@ public func >-< <A, B, C>(
         if let next = sa.value {
             rhs.f(
                   next(t)
-                , bb.f(t)
-                , bc.f(t) )
+                , bb.f(t: t)
+                , bc.f(t: t) )
         }
     }
     
-    lhs.sa.addListener(rhs.o)
+    lhs.sa.addListener(listener: rhs.o)
     return lhs.sa
 }
 
@@ -140,7 +140,7 @@ public func >-< <A, B, C>(
     lhs:    ( sa: Source<A>, bb: Behavior<B>
             , bc: Behavior<C> ),
     
-    rhs:    ( o: Outlet<A>
+    rhs:    ( o: Outlet
             , f: (A, B, C) -> ()
             , pred: (A, B, C) -> Bool ) )
     
@@ -154,17 +154,17 @@ public func >-< <A, B, C>(
         
         if let next = sa.value where rhs.pred(
               next(t)
-            , bb.f(t)
-            , bc.f(t) ) {
+            , bb.f(t: t)
+            , bc.f(t: t) ) {
             
                 rhs.f(
                       next(t)
-                    , bb.f(t)
-                    , bc.f(t) )
+                    , bb.f(t: t)
+                    , bc.f(t: t) )
         }
     }
     
-    lhs.sa.addListener(rhs.o)
+    lhs.sa.addListener(listener: rhs.o)
     return lhs.sa
 }
 
@@ -173,7 +173,7 @@ public func >-< <A, B, C, D>(
     lhs:    ( sa: Source<A>, bb: Behavior<B>
             , bc: Behavior<C>, bd: Behavior<D> ),
     
-    rhs:    ( o: Outlet<A>
+    rhs:    ( o: Outlet
             , f: (A, B, C, D) -> () ) )
     
     ->      Source<A> {
@@ -188,13 +188,13 @@ public func >-< <A, B, C, D>(
         if let next = sa.value {
             rhs.f(
                   next(t)
-                , bb.f(t)
-                , bc.f(t)
-                , bd.f(t))
+                , bb.f(t: t)
+                , bc.f(t: t)
+                , bd.f(t: t))
         }
     }
     
-    lhs.sa.addListener(rhs.o)
+    lhs.sa.addListener(listener: rhs.o)
     return lhs.sa
 }
 
@@ -203,7 +203,7 @@ public func >-< <A, B, C, D>(
     lhs:    ( sa: Source<A>, bb: Behavior<B>
             , bc: Behavior<C>, bd: Behavior<D>),
     
-    rhs:    ( o: Outlet<A>
+    rhs:    ( o: Outlet
             , f: (A, B, C, D) -> ()
             , pred: (A, B, C, D) -> Bool ) )
     
@@ -218,165 +218,18 @@ public func >-< <A, B, C, D>(
         
         if let next = sa.value where rhs.pred(
               next(t)
-            , bb.f(t)
-            , bc.f(t)
-            , bd.f(t) ) {
+            , bb.f(t: t)
+            , bc.f(t: t)
+            , bd.f(t: t) ) {
             
                 rhs.f(
                       next(t)
-                    , bb.f(t)
-                    , bc.f(t)
-                    , bd.f(t) )
+                    , bb.f(t: t)
+                    , bc.f(t: t)
+                    , bd.f(t: t) )
         }
     }
     
-    lhs.sa.addListener(rhs.o)
-    return lhs.sa
-}
-
-public func >-< <A, B, C, D, E>(
-
-    lhs:    ( sa: Source<A>, bb: Behavior<B>, bc: Behavior<C>
-            , bd: Behavior<D>, be: Behavior<E>),
-    
-    rhs:    ( o: Outlet<A>
-            , f: (A, B, C, D, E) -> () ) )
-    
-    ->      Source<A> {
-    
-    rhs.o.setOutputFunction {
-    
-        [ unowned sa = lhs.sa
-        , unowned bb = lhs.bb
-        , unowned bc = lhs.bc
-        , unowned bd = lhs.bd
-        , unowned be = lhs.be ] t in
-        
-        if let next = sa.value {
-            rhs.f(
-                  next(t)
-                , bb.f(t)
-                , bc.f(t)
-                , bd.f(t)
-                , be.f(t) )
-        }
-    }
-    
-    lhs.sa.addListener(rhs.o)
-    return lhs.sa
-}
-
-public func >-< <A, B, C, D, E>(
-
-    lhs:    ( sa: Source<A>, bb: Behavior<B>, bc: Behavior<C>
-            , bd: Behavior<D>, be: Behavior<E>),
-    
-    rhs:    ( o: Outlet<A>
-            , f: (A, B, C, D, E) -> ()
-            , pred: (A, B, C, D, E) -> Bool ) )
-    
-    ->      Source<A> {
-    
-    rhs.o.setOutputFunction {
-    
-        [ unowned sa = lhs.sa
-        , unowned bb = lhs.bb
-        , unowned bc = lhs.bc
-        , unowned bd = lhs.bd
-        , unowned be = lhs.be ] t in
-        
-        if let next = sa.value where rhs.pred(
-              next(t)
-            , bb.f(t)
-            , bc.f(t)
-            , bd.f(t)
-            , be.f(t) ) {
-            
-                rhs.f(
-                      next(t)
-                    , bb.f(t)
-                    , bc.f(t)
-                    , bd.f(t)
-                    , be.f(t) )
-        }
-    }
-    
-    lhs.sa.addListener(rhs.o)
-    return lhs.sa
-}
-
-public func >-< <A, B, C, D, E, F>(
-
-    lhs:    ( sa: Source<A>, bb: Behavior<B>, bc: Behavior<C>
-            , bd: Behavior<D>, be: Behavior<E>, bf: Behavior<F> ),
-    
-    rhs:    ( o: Outlet<A>
-            , f: (A, B, C, D, E, F) -> () ) )
-    
-    ->      Source<A> {
-    
-    rhs.o.setOutputFunction {
-    
-        [ unowned sa = lhs.sa
-        , unowned bb = lhs.bb
-        , unowned bc = lhs.bc
-        , unowned bd = lhs.bd
-        , unowned be = lhs.be
-        , unowned bf = lhs.bf ] t in
-        
-        if let next = sa.value {
-            rhs.f(
-                  next(t)
-                , bb.f(t)
-                , bc.f(t)
-                , bd.f(t)
-                , be.f(t)
-                , bf.f(t) )
-        }
-    }
-    
-    lhs.sa.addListener(rhs.o)
-    return lhs.sa
-}
-
-public func >-< <A, B, C, D, E, F>(
-
-    lhs:    ( sa: Source<A>, bb: Behavior<B>, bc: Behavior<C>
-            , bd: Behavior<D>, be: Behavior<E>, bf: Behavior<F> ),
-    
-    rhs:    ( o: Outlet<A>
-            , f: (A, B, C, D, E, F) -> ()
-            , pred: (A, B, C, D, E, F) -> Bool ) )
-    
-    ->      Source<A> {
-    
-    rhs.o.setOutputFunction {
-    
-        [ unowned sa = lhs.sa
-        , unowned bb = lhs.bb
-        , unowned bc = lhs.bc
-        , unowned bd = lhs.bd
-        , unowned be = lhs.be
-        , unowned bf = lhs.bf ] t in
-        
-        if let next = sa.value where rhs.pred(
-              next(t)
-            , bb.f(t)
-            , bc.f(t)
-            , bd.f(t)
-            , be.f(t)
-            , bf.f(t) ) {
-            
-                rhs.f(
-                      next(t)
-                    , bb.f(t)
-                    , bc.f(t)
-                    , bd.f(t)
-                    , be.f(t)
-                    , bf.f(t) )
-        }
-    }
-    
-    lhs.sa.addListener(rhs.o)
+    lhs.sa.addListener(listener: rhs.o)
     return lhs.sa
 }

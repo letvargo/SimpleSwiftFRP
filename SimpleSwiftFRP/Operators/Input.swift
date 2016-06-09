@@ -8,58 +8,104 @@
 
 infix operator >-- { associativity left }
 
-public func >-- <T>(
+public func >-- <A>(
 
-    s:      Source<T>,
+    sa:     Source<A>,
     
-    b:      Behavior<T> )
+    ba:     Behavior<A> )
     
-    ->      Behavior<T> {
+    ->      Behavior<A> {
         
-    return b.setAddNewEvent {
+    return ba.setAddNewEvent {
     
-        [ unowned s
-        , unowned b ] t in
+        [ unowned sa
+        , unowned ba ] time in
         
-        if let next = s.value {
+        guard
+            let value = sa.value
+        else { return false }
         
-            b.appendEvent(Event(t, next))
-            return true
+        return ba.appendEvent( event: Event(time, value) )
         
-        } else {
-        
-            return false
-        
-        }
     }
-        .listenTo(s)
+        .listenTo(whisperer: sa)
 }
 
-public func >-- <T>(
+public func >-- <A>(
 
-    s:      Source<T>,
+    sa:     Source<A>,
     
-    rhs:    ( b: Behavior<T>
-            , pred: T -> Bool ) )
+    rhs:    ( ba: Behavior<A>
+            , pred: (A) -> Bool ) )
     
-    ->      Behavior<T> {
+    ->      Behavior<A> {
 
-    return rhs.b.setAddNewEvent {
+    return rhs.ba.setAddNewEvent {
     
-        [ unowned s
-        , unowned b = rhs.b ] t in
+        [ unowned sa
+        , unowned ba = rhs.ba
+        , pred = rhs.pred ]
         
-        if let next = s.value
-            where rhs.pred(next(t)) {
+        time in
         
-            b.appendEvent(Event(t, next))
-            return true
-            
-        } else {
+        guard
+            let value = sa.value where pred(value(time))
+        else { return false }
         
-            return false
+        return ba.appendEvent( event: Event(time, value) )
         
-        }
     }
-        .listenTo(s)
+        .listenTo(whisperer: sa)
+}
+
+public func >-- <A, B>(
+    
+    sa:      Source<A>,
+    
+    rhs:    ( bb: Behavior<B>
+            , f: (A) -> B ) )
+    
+    ->      Behavior<B> {
+        
+    return rhs.bb.setAddNewEvent {
+    
+        [ unowned sa
+        , unowned bb = rhs.bb
+        , f = rhs.f ] time in
+        
+        guard
+            let value = sa.value
+        else { return false }
+            
+        return bb.appendEvent( event: Event(time, f(value(time))) )
+            
+    }
+        .listenTo(whisperer: sa)
+}
+
+public func >-- <A, B>(
+    
+    sa:      Source<A>,
+    
+    rhs:    ( bb: Behavior<B>
+            , pred: (B) -> Bool
+            , f: (A) -> B ) )
+    
+    ->      Behavior<B> {
+        
+    return rhs.bb.setAddNewEvent {
+            
+        [ unowned sa
+        , unowned bb = rhs.bb
+        , pred = rhs.pred
+        , f = rhs.f ] time in
+            
+        guard
+            let value = sa.value where pred(f(value(time)))
+        else { return false }
+        
+        return bb.appendEvent( event: Event(time, f(value(time))) )
+        
+    }
+        .listenTo(whisperer: sa)
 }

@@ -12,34 +12,34 @@ public typealias Time = CMTime
 
 public let tScale: Int32 = 1440000
 
-extension Time: Comparable {
+extension Time {
     
     public var isValid: Bool {
-        return self.flags.rawValue & CMTimeFlags.Valid.rawValue != 0
+        return flags.rawValue & CMTimeFlags.valid.rawValue != 0
     }
     
     public var isInvalid: Bool {
-        return !self.isValid
+        return !isValid
     }
     
     public var isNegativeInfinity: Bool {
-        return self.flags.rawValue & CMTimeFlags.NegativeInfinity.rawValue != 0
+        return flags.rawValue & CMTimeFlags.negativeInfinity.rawValue != 0
     }
     
     public var isPositiveInfinity: Bool {
-        return self.flags.rawValue & CMTimeFlags.PositiveInfinity.rawValue != 0
+        return flags.rawValue & CMTimeFlags.positiveInfinity.rawValue != 0
     }
     
     public var isIndefinite: Bool {
-        return self.isValid && (self.flags.rawValue & CMTimeFlags.Indefinite.rawValue != 0)
+        return isValid && (flags.rawValue & CMTimeFlags.indefinite.rawValue != 0)
     }
     
     public var isNumeric: Bool {
-        return (self.flags.rawValue & (CMTimeFlags.Valid.rawValue | CMTimeFlags.ImpliedValueFlagsMask.rawValue)) == CMTimeFlags.Valid.rawValue
+        return (flags.rawValue & (CMTimeFlags.valid.rawValue | CMTimeFlags.impliedValueFlagsMask.rawValue)) == CMTimeFlags.valid.rawValue
     }
     
     public var hasBeenRounded: Bool {
-        return self.isNumeric && (self.flags.rawValue & CMTimeFlags.HasBeenRounded.rawValue) != 0
+        return isNumeric && (flags.rawValue & CMTimeFlags.hasBeenRounded.rawValue) != 0
     }
     
     public var timeSince: Time {
@@ -51,7 +51,7 @@ extension Time: Comparable {
     }
 }
 
-public func now() -> Time {
+public let now: () -> Time = {
     return CMTimeMakeWithSeconds(CACurrentMediaTime(), tScale)
 }
 

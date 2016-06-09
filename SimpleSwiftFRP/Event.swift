@@ -10,7 +10,7 @@ struct Event<T> {
 
     let time: Time
     
-    let f: Time -> T
+    let f: (Time) -> T
 
     init(_ value: T) {
         time = Up.time
@@ -22,12 +22,12 @@ struct Event<T> {
         f = { _ in value }
     }
     
-    init(_ f: Time -> T) {
+    init(_ f: (Time) -> T) {
         time = Up.time
         self.f = f
     }
     
-    init(_ t: Time, _ f: Time -> T) {
+    init(_ t: Time, _ f: (Time) -> T) {
         time = t
         self.f = f
     }

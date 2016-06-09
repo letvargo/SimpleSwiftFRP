@@ -14,7 +14,7 @@ public func send<T>(
     
     let t = now()
     dispatch_async(queue) {
-        src.notify({ _ in value }, time: t)
+        src.notify(value: { _ in value }, time: t)
         callback?()
     }
     
@@ -23,13 +23,13 @@ public func send<T>(
 
 public func send<T>(
     src: Source<T>
-    , f: Time -> T
+    , f: (Time) -> T
     , onQueue queue: dispatch_queue_t = Up.notificationQueue
     , callback: (() -> ())? = nil ) -> Time {
         
     let t = now()
     dispatch_async(queue) {
-        src.notify(f, time: t)
+        src.notify(value: f, time: t)
         callback?()
     }
     

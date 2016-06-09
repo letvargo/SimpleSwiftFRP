@@ -115,13 +115,13 @@ final public class Source<T>: Whisperer {
     ///
     /// The only publicly available way to change the value is by using the global `send:` function.
 
-    private var _value: (Time -> T)?
+    private var _value: ((Time) -> T)?
     
     /// An internal getter for the private `_value` property
     ///
     /// This computed property gives `Behavior`s and `Outlet`s read-only access to the `Source<T>`'s current value function.
     
-    var value: (Time -> T)? {
+    var value: ((Time) -> T)? {
         return _value
     }
     
@@ -152,9 +152,9 @@ final public class Source<T>: Whisperer {
     /// - Parameter value: The new value function for the `Source<T>`
     /// - Parameter time: The time of the new event
     
-    func notify(value: Time -> T, time t: Time) {
+    func notify(value: (Time) -> T, time t: Time) {
         _value = value
-        listeners.notify(t)
+        listeners.notify(parameters: t)
     }
     
     /// An internal method for adding an object to the `listeners` `ObserverSet`
@@ -162,6 +162,37 @@ final public class Source<T>: Whisperer {
     /// This method is required by the `Whisperer` protocol.
     
     func addListener(listener: Listener) {
-        listeners.add { listener.receiveNotification($0) }
+    
+        _ = listeners.add { time in
+            listener.receiveNotification(t: time)
+        }
+    }
+    
+    public func send(
+          value: T
+        , onQueue q: dispatch_queue_t = Up.notificationQueue
+        , callback: (() -> ())? = nil ) -> Time {
+            
+            let t = now()
+            dispatch_async(q) {
+                self.notify(value: { _ in value }, time: t)
+                callback?()
+            }
+            
+            return t
+    }
+    
+    public func send(
+          f: (Time) -> T
+        , onQueue q: dispatch_queue_t = Up.notificationQueue
+        , callback: (() -> ())? = nil ) -> Time {
+            
+            let t = now()
+            dispatch_async(q) {
+                self.notify(value: f, time: t)
+                callback?()
+            }
+            
+            return t
     }
 }

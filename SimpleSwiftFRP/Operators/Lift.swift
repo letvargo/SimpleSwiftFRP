@@ -12,18 +12,20 @@ public func --^<A, B>(
 
     ba:     Behavior<A>,
     
-    rhs:    ( bb: Behavior<B>, f: A -> B ) )
+    rhs:    ( bb: Behavior<B>, f: (A) -> B ) )
     
     ->      Behavior<B> {
     
     return rhs.bb.setFirstEvent(
-        Event {
-            [ unowned ba ] t in
+    
+        event: Event {
+            [ unowned ba
+            , f = rhs.f ] time in
             
-            rhs.f(ba.f(t))
+            f(ba.f(t: time))
         }
     )
-        .listenTo(ba)
+        .listenTo(whisperer: ba)
 }
 
 public func --^<A, B>(
@@ -31,26 +33,28 @@ public func --^<A, B>(
     ba:     Behavior<A>,
     
     rhs:    ( bb: Behavior<B>
-            , f: A -> B
-            , pred: B -> Bool ) )
+            , f: (A) -> B
+            , pred: (B) -> Bool ) )
     
     ->      Behavior<B> {
     
     return rhs.bb.setFirstEvent(
-        Event {
-            [ unowned ba ] t in
+        event: Event {
+            [ unowned ba
+            , transform = rhs.f ] time in
             
-            rhs.f(ba.f(t))
+            transform(ba.f(t: time))
         }
     ).setAddNewEvent {
         
-        [ unowned ba ] t in
+        [ unowned ba
+        , transform = rhs.f
+        , pred = rhs.pred ] time in
         
-        let newValue = rhs.f(ba.f(t))
+        return pred(transform(ba.f(t: time)))
         
-        return rhs.pred(newValue)
     }
-        .listenTo(ba)
+        .listenTo(whisperer: ba)
 }
 
 public func --^<A, B, C>(
@@ -63,18 +67,18 @@ public func --^<A, B, C>(
     ->      Behavior<C> {
     
     return rhs.bc.setFirstEvent(
-        Event {
+        event: Event {
             [ unowned ba = lhs.ba
-            , unowned bb = lhs.bb ] t in
+            , unowned bb = lhs.bb ] time in
             
             rhs.f(
-                  ba.f(t)
-                , bb.f(t)
+                  ba.f(t: time)
+                , bb.f(t: time)
             )
         }
     )
-        .listenTo(lhs.ba)
-        .listenTo(lhs.bb)
+        .listenTo(whisperer: lhs.ba)
+        .listenTo(whisperer: lhs.bb)
 }
 
 public func --^<A, B, C>(
@@ -83,18 +87,18 @@ public func --^<A, B, C>(
     
     rhs:    ( bc: Behavior<C>
             , f: (A, B) -> C
-            , pred: C -> Bool ) )
+            , pred: (C) -> Bool ) )
     
     ->      Behavior<C> {
     
     return rhs.bc.setFirstEvent(
-        Event {
+        event: Event {
             [ unowned ba = lhs.ba
             , unowned bb = lhs.bb ] t in
             
             rhs.f(
-                  ba.f(t)
-                , bb.f(t)
+                  ba.f(t: t)
+                , bb.f(t: t)
             )
         }
     ).setAddNewEvent {
@@ -103,13 +107,13 @@ public func --^<A, B, C>(
         , unowned bb = lhs.bb ] t in
         
         let newValue = rhs.f(
-              ba.f(t)
-            , bb.f(t) )
+            ba.f(t: t)
+            , bb.f(t: t) )
         
         return rhs.pred(newValue)
     }
-        .listenTo(lhs.ba)
-        .listenTo(lhs.bb)
+        .listenTo(whisperer: lhs.ba)
+        .listenTo(whisperer: lhs.bb)
 }
 
 public func --^<A, B, C, D>(
@@ -123,20 +127,20 @@ public func --^<A, B, C, D>(
     ->      Behavior<D> {
     
     return rhs.bd.setFirstEvent(
-        Event {
+        event: Event {
             [ unowned ba = lhs.ba
             , unowned bb = lhs.bb
             , unowned bc = lhs.bc ] t in
             
             rhs.f(
-                  ba.f(t)
-                , bb.f(t)
-                , bc.f(t) )
+                  ba.f(t: t)
+                , bb.f(t: t)
+                , bc.f(t: t) )
         }
     )
-        .listenTo(lhs.ba)
-        .listenTo(lhs.bb)
-        .listenTo(lhs.bc)
+        .listenTo(whisperer: lhs.ba)
+        .listenTo(whisperer: lhs.bb)
+        .listenTo(whisperer: lhs.bc)
 }
 
 public func --^<A, B, C, D>(
@@ -146,20 +150,20 @@ public func --^<A, B, C, D>(
     
     rhs:    ( bd: Behavior<D>
             , f: (A, B, C) -> D
-            , pred: D -> Bool ) )
+            , pred: (D) -> Bool ) )
     
     ->      Behavior<D> {
     
     return rhs.bd.setFirstEvent(
-        Event {
+        event: Event {
             [ unowned ba = lhs.ba
             , unowned bb = lhs.bb
             , unowned bc = lhs.bc ] t in
             
             rhs.f(
-                  ba.f(t)
-                , bb.f(t)
-                , bc.f(t) )
+                  ba.f(t: t)
+                , bb.f(t: t)
+                , bc.f(t: t) )
         }
     ).setAddNewEvent {
         
@@ -168,15 +172,15 @@ public func --^<A, B, C, D>(
         , unowned bc = lhs.bc ] t in
         
         let newValue = rhs.f(
-              ba.f(t)
-            , bb.f(t)
-            , bc.f(t) )
+            ba.f(t: t)
+            , bb.f(t: t)
+            , bc.f(t: t) )
         
         return rhs.pred(newValue)
     }
-        .listenTo(lhs.ba)
-        .listenTo(lhs.bb)
-        .listenTo(lhs.bc)
+        .listenTo(whisperer: lhs.ba)
+        .listenTo(whisperer: lhs.bb)
+        .listenTo(whisperer: lhs.bc)
 }
 
 public func --^<A, B, C, D, E>(
@@ -190,23 +194,23 @@ public func --^<A, B, C, D, E>(
     ->      Behavior<E> {
     
     return rhs.be.setFirstEvent(
-        Event {
+        event: Event {
             [ unowned ba = lhs.ba
             , unowned bb = lhs.bb
             , unowned bc = lhs.bc
             , unowned bd = lhs.bd ] t in
             
             rhs.f(
-                  ba.f(t)
-                , bb.f(t)
-                , bc.f(t)
-                , bd.f(t) )
+                  ba.f(t: t)
+                , bb.f(t: t)
+                , bc.f(t: t)
+                , bd.f(t: t) )
         }
     )
-        .listenTo(lhs.ba)
-        .listenTo(lhs.bb)
-        .listenTo(lhs.bc)
-        .listenTo(lhs.bd)
+        .listenTo(whisperer: lhs.ba)
+        .listenTo(whisperer: lhs.bb)
+        .listenTo(whisperer: lhs.bc)
+        .listenTo(whisperer: lhs.bd)
 }
 
 public func --^<A, B, C, D, E>(
@@ -216,21 +220,21 @@ public func --^<A, B, C, D, E>(
     
     rhs:    ( be: Behavior<E>
             , f: (A, B, C, D) -> E
-            , pred: E -> Bool ) )
+            , pred: (E) -> Bool ) )
     
     ->      Behavior<E> {
     
     return rhs.be.setFirstEvent(
-        Event {
+        event: Event {
             [ unowned ba = lhs.ba
             , unowned bb = lhs.bb
             , unowned bc = lhs.bc
             , unowned bd = lhs.bd ] t in
             rhs.f(
-                ba.f(t)
-              , bb.f(t)
-              , bc.f(t)
-              , bd.f(t) )
+                ba.f(t: t)
+                , bb.f(t: t)
+                , bc.f(t: t)
+                , bd.f(t: t) )
         }
      ).setAddNewEvent {
         
@@ -240,189 +244,15 @@ public func --^<A, B, C, D, E>(
         , unowned bd = lhs.bd ] t in
         
         let newValue = rhs.f(
-              ba.f(t)
-            , bb.f(t)
-            , bc.f(t)
-            , bd.f(t) )
+              ba.f(t: t)
+            , bb.f(t: t)
+            , bc.f(t: t)
+            , bd.f(t: t) )
         
         return rhs.pred(newValue)
     }
-        .listenTo(lhs.ba)
-        .listenTo(lhs.bb)
-        .listenTo(lhs.bc)
-        .listenTo(lhs.bd)
-}
-
-public func --^<A, B, C, D, E, F>(
-
-    lhs:    ( ba: Behavior<A>, bb: Behavior<B>, bc: Behavior<C>
-            , bd: Behavior<D>, be: Behavior<E> ),
-    
-    rhs:    ( bf: Behavior<F>
-            , f: (A, B, C, D, E) -> F ) )
-    
-    ->      Behavior<F> {
-    
-    return rhs.bf.setFirstEvent(
-        Event {
-            [ unowned ba = lhs.ba
-            , unowned bb = lhs.bb
-            , unowned bc = lhs.bc
-            , unowned bd = lhs.bd
-            , unowned be = lhs.be ] t in
-            
-            rhs.f(
-                  ba.f(t)
-                , bb.f(t)
-                , bc.f(t)
-                , bd.f(t)
-                , be.f(t) )
-        }
-    )
-        .listenTo(lhs.ba)
-        .listenTo(lhs.bb)
-        .listenTo(lhs.bc)
-        .listenTo(lhs.bd)
-        .listenTo(lhs.be)
-}
-
-public func --^<A, B, C, D, E, F>(
-
-    lhs:    ( ba: Behavior<A>, bb: Behavior<B>, bc: Behavior<C>
-            , bd: Behavior<D>, be: Behavior<E> ),
-    
-    rhs:    ( bf: Behavior<F>
-            , f: (A, B, C, D, E) -> F
-            , pred: F -> Bool ) )
-    
-    ->      Behavior<F> {
-    
-    return rhs.bf.setFirstEvent(
-        Event {
-            [ unowned ba = lhs.ba
-            , unowned bb = lhs.bb
-            , unowned bc = lhs.bc
-            , unowned bd = lhs.bd
-            , unowned be = lhs.be ] t in
-            
-            rhs.f(
-                ba.f(t)
-              , bb.f(t)
-              , bc.f(t)
-              , bd.f(t)
-              , be.f(t) )
-        }
-     ).setAddNewEvent {
-        
-        [ unowned ba = lhs.ba
-        , unowned bb = lhs.bb
-        , unowned bc = lhs.bc
-        , unowned bd = lhs.bd
-        , unowned be = lhs.be ] t in
-        
-        let newValue = rhs.f(
-              ba.f(t)
-            , bb.f(t)
-            , bc.f(t)
-            , bd.f(t)
-            , be.f(t) )
-        
-        return rhs.pred(newValue)
-    }
-        .listenTo(lhs.ba)
-        .listenTo(lhs.bb)
-        .listenTo(lhs.bc)
-        .listenTo(lhs.bd)
-        .listenTo(lhs.be)
-}
-
-public func --^<A, B, C, D, E, F, G>(
-
-    lhs:    ( ba: Behavior<A>, bb: Behavior<B>, bc: Behavior<C>
-            , bd: Behavior<D>, be: Behavior<E>, bf: Behavior<F> ),
-    
-    rhs:    ( bg: Behavior<G>
-            , f: (A, B, C, D, E, F) -> G ) )
-    
-    ->      Behavior<G> {
-    
-    return rhs.bg.setFirstEvent(
-        Event {
-            [ unowned ba = lhs.ba
-            , unowned bb = lhs.bb
-            , unowned bc = lhs.bc
-            , unowned bd = lhs.bd
-            , unowned be = lhs.be
-            , unowned bf = lhs.bf ] t in
-            
-            rhs.f(
-                  ba.f(t)
-                , bb.f(t)
-                , bc.f(t)
-                , bd.f(t)
-                , be.f(t)
-                , bf.f(t) )
-        }
-    )
-        .listenTo(lhs.ba)
-        .listenTo(lhs.bb)
-        .listenTo(lhs.bc)
-        .listenTo(lhs.bd)
-        .listenTo(lhs.be)
-        .listenTo(lhs.bf)
-}
-
-public func --^<A, B, C, D, E, F, G>(
-
-    lhs:    ( ba: Behavior<A>, bb: Behavior<B>, bc: Behavior<C>
-            , bd: Behavior<D>, be: Behavior<E>, bf: Behavior<F> ),
-    
-    rhs:    ( bg: Behavior<G>
-            , f: (A, B, C, D, E, F) -> G
-            , pred: G -> Bool ) )
-    
-    ->      Behavior<G> {
-    
-    return rhs.bg.setFirstEvent(
-        Event {
-            [ unowned ba = lhs.ba
-            , unowned bb = lhs.bb
-            , unowned bc = lhs.bc
-            , unowned bd = lhs.bd
-            , unowned be = lhs.be
-            , unowned bf = lhs.bf ] t in
-            
-            rhs.f(
-                ba.f(t)
-              , bb.f(t)
-              , bc.f(t)
-              , bd.f(t)
-              , be.f(t)
-              , bf.f(t) )
-        }
-     ).setAddNewEvent {
-        
-        [ unowned ba = lhs.ba
-        , unowned bb = lhs.bb
-        , unowned bc = lhs.bc
-        , unowned bd = lhs.bd
-        , unowned be = lhs.be
-        , unowned bf = lhs.bf ] t in
-        
-        let newValue = rhs.f(
-              ba.f(t)
-            , bb.f(t)
-            , bc.f(t)
-            , bd.f(t)
-            , be.f(t)
-            , bf.f(t) )
-        
-        return rhs.pred(newValue)
-    }
-        .listenTo(lhs.ba)
-        .listenTo(lhs.bb)
-        .listenTo(lhs.bc)
-        .listenTo(lhs.bd)
-        .listenTo(lhs.be)
-        .listenTo(lhs.bf)
+        .listenTo(whisperer: lhs.ba)
+        .listenTo(whisperer: lhs.bb)
+        .listenTo(whisperer: lhs.bc)
+        .listenTo(whisperer: lhs.bd)
 }
