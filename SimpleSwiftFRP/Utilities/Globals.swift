@@ -8,7 +8,11 @@
 
 import Foundation
 
-struct Up {
+public typealias Time = Double
+
+public let now: () -> Time = NSDate.timeIntervalSinceReferenceDate
+
+public struct Up {
 
     static let time = NSDate.timeIntervalSinceReferenceDate()
     
