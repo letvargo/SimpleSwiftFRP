@@ -7,9 +7,10 @@
 //
 
 import CoreMedia
+import Foundation
 
 struct Up {
-    static let time = CMTimeMakeWithSeconds(CACurrentMediaTime(), tScale)
+    static let time = NSDate.timeIntervalSinceReferenceDate()
     static let notificationQueue: dispatch_queue_t = dispatch_queue_create("com.letvargo.NotificationQueue", DISPATCH_QUEUE_SERIAL)
 }
 

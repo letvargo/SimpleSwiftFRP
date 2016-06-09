@@ -7,12 +7,13 @@
 //
 
 import CoreMedia
+import Foundation
 
-public typealias Time = CMTime
+public typealias Time = Double
 
 public let tScale: Int32 = 1440000
 
-extension Time {
+extension CMTime {
     
     public var isValid: Bool {
         return flags.rawValue & CMTimeFlags.valid.rawValue != 0
@@ -42,7 +43,7 @@ extension Time {
         return isNumeric && (flags.rawValue & CMTimeFlags.hasBeenRounded.rawValue) != 0
     }
     
-    public var timeSince: Time {
+    public var timeSince: CMTime {
         return CMTimeSubtract(CMTimeMakeWithSeconds(CACurrentMediaTime(), self.timescale), self)
     }
     
@@ -51,22 +52,20 @@ extension Time {
     }
 }
 
-public let now: () -> Time = {
-    return CMTimeMakeWithSeconds(CACurrentMediaTime(), tScale)
-}
+public let now: () -> Time = NSDate.timeIntervalSinceReferenceDate
 
-public func ==(lhs: Time, rhs: Time) -> Bool {
+public func ==(lhs: CMTime, rhs: CMTime) -> Bool {
     return CMTimeCompare(lhs, rhs) == 0
 }
 
-public func <(lhs: Time, rhs: Time) -> Bool {
+public func <(lhs: CMTime, rhs: CMTime) -> Bool {
     return CMTimeCompare(lhs, rhs) == -1
 }
 
-public func -(lhs: Time, rhs: Time) -> Time {
+public func -(lhs: CMTime, rhs: CMTime) -> CMTime {
     return CMTimeSubtract(lhs, rhs)
 }
 
-public func +(lhs: Time, rhs: Time) -> Time {
+public func +(lhs: CMTime, rhs: CMTime) -> CMTime {
     return CMTimeAdd(lhs, rhs)
 }
