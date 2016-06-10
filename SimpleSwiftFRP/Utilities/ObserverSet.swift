@@ -18,7 +18,7 @@ public class ObserverSetEntry<Parameters> {
     private init(object: AnyObject, _ f: (AnyObject) -> (Parameters) -> Void) {
         self.object = object
         self.f = f
-    }
+    } 
 }
 
 public class ObserverSet<Parameters> {
@@ -60,5 +60,20 @@ public class ObserverSet<Parameters> {
         }
         
         toCall.forEach { $0(parameters) }
+    }
+    
+    public func merge(observerSet: ObserverSet<Parameters>) -> ObserverSet<Parameters> {
+    
+        observerSet.entries.forEach { otherEntry in
+        
+            if !self.entries.contains({ entry in
+            
+                    entry.object === otherEntry.object
+                
+                }) {
+                self.entries.append(otherEntry)
+            }
+        }
+        return self
     }
 }

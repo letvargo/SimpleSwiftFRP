@@ -26,8 +26,7 @@ public struct Occurrence<Value> {
     ///
     /// The time of the Occurrence will be set to `now()`.
     public init(_ value: Value) {
-        self.time = now()
-        self.value = value
+        self.init(now(), value)
     }
 }
 
